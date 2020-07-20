@@ -1,0 +1,50 @@
+<div class="form-inline">
+  <div class="form-group">
+    <div class="form-group">
+      <input
+        type="text"
+        name=""
+        id="search"
+        class="form-control"
+        placeholder="Búsqueda por Nombre"
+        [(ngModel)]="searchName"
+        [ngModelOptions]="{ standalone: true }"
+      />
+    </div>
+    <input
+      type="text"
+      ngbDatepicker
+      placeholder="Desde"
+      #desde="ngbDatepicker"
+      (click)="desde.toggle()"
+      class="form-control"
+      id="desde"
+      [(ngModel)]="since"
+      [ngModelOptions]="{ standalone: true }"
+    />
+    <!-- <small id="helpId" class="text-muted">Help text</small> -->
+  </div>
+  <div class="form-group">
+    <input
+      type="text"
+      ngbDatepicker
+      placeholder="Hasta"
+      #hasta="ngbDatepicker"
+      (click)="hasta.toggle()"
+      class="form-control"
+      id="hasta"
+      [(ngModel)]="until"
+      [ngModelOptions]="{ standalone: true }"
+    />
+    <!-- <small id="helpId" class="text-muted">Help text</small> -->
+  </div>
+
+  <div class="form-group">
+    <button
+      class="btn btn-raised btn-warning mt-2"
+      (click)="formFilter.reset(); hasta.writeValue(''); desde.writeValue('')"
+    >
+      <i class="ft-trash"></i>
+    </button>
+  </div>
+</div>

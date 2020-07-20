@@ -1,0 +1,97 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+              Comprobante de pago
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formBlog">
+              <div class="form-row align-items-end">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="email">Referencia de pago</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="referenciaPago"
+                      id="referenciaPago"
+                      required
+                    />
+                  </div>
+                </div>
+
+              </div>
+              <!-- <div class="form-row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label for="roles">Roles</label>
+                    <select
+                      class="form-control"
+                      name="roles"
+                      id="roles"
+                      formControlName="roles"
+                      multiple
+                      *ngIf="roles$ | async as roles"
+                      required
+                    >
+                      <option
+                        *ngFor="let role of roles['data']; index as i"
+                        for
+                        [value]="role.id"
+                        >{{ role.name }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+              </div> -->
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="(blogToEdit$ | async)?.id; else noEditMode"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    [disabled]="formBlog.invalid"
+                    (click)="edit()"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formBlog.invalid"
+                      (click)="add()"
+                    >
+                      Enviar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formBlog.dirty"
+                    (click)="formBlog.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

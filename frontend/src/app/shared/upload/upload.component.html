@@ -1,0 +1,209 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="modal-header">
+        <div class="row">
+          <div class="col-sm-12 col-md-8">
+            <div class="modal-title">
+              <h3>Seleccione Archivo</h3>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 justify-self-end text-end">
+            <button class="btn btn-raised btn-warning" (click)="close()">
+              Confirmar y Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div
+        ng2FileDrop
+        [ngClass]="{ 'nv-file-over': hasBaseDropZoneOver }"
+        (fileOver)="fileOverBase($event)"
+        [uploader]="uploader"
+        class="well my-drop-zone"
+      >
+        Base drop zone
+      </div> -->
+
+      <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-6">
+          <div
+            ng2FileDrop
+            [ngClass]="{ 'another-file-over-class': hasAnotherDropZoneOver }"
+            (fileOver)="fileOverAnother($event)"
+            [uploader]="uploader"
+            class="well my-drop-zone"
+            (click)="inputUploader.click()"
+            style="height: 15rem;display: flex;align-items: center;padding:10px"
+          >
+            Click aquí para agregar, o sueltes sus archivos aquí
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 my-3">
+          <h3>Archivos cargados</h3>
+          <li class="list-group" *ngIf="itemsUploaded.length; else noItems">
+            <ul class="list-group-item" *ngFor="let item of itemsUploaded">
+              <div class="row">
+                <div class="col-10">
+                  {{ item.name_file }}
+                </div>
+                <div class="col-2">
+                  <button
+                    class="btn btn-raised btn-sm btn-danger"
+                    (click)="deleteItem(item.name_file)"
+                  >
+                    <i class="ft-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </ul>
+          </li>
+          <ng-template #noItems>
+            No se han cargado items aún
+          </ng-template>
+
+          <!-- {{ itemsUploaded | json }} -->
+        </div>
+      </div>
+      <input
+        type="file"
+        class="form-control"
+        ng2FileSelect
+        [uploader]="uploader"
+        multiple
+        style="visibility: hidden"
+        #inputUploader
+      /><br />
+    </div>
+
+    <div class="col-md-12 my-3" *ngIf="uploader?.queue?.length">
+      <h3>Cola de Carga</h3>
+      <p>En cola: {{ uploader?.queue?.length }}</p>
+
+      <table class="table table-responsive col-12">
+        <thead>
+          <tr>
+            <th width="50%">Nombre</th>
+            <th>Tamaño</th>
+            <th>Progreso</th>
+            <!-- <th>Status</th> -->
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of uploader.queue">
+            <td>
+              <strong>{{ item?.file?.name }}</strong>
+            </td>
+            <td nowrap>
+              {{ item?.file?.size / 1024 / 1024 | number: '.2' }} MB
+            </td>
+            <td>
+              <div class="progress" style="margin-bottom: 0;">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  [ngStyle]="{ width: item.progress + '%' }"
+                ></div>
+              </div>
+            </td>
+            <!-- <td class="text-center">
+              <span *ngIf="item.isSuccess"
+                ><i class="glyphicon glyphicon-ok"></i
+              ></span>
+              <span *ngIf="item.isCancel"
+                ><i class="glyphicon glyphicon-ban-circle"></i
+              ></span>
+              <span *ngIf="item.isError"
+                ><i class="glyphicon glyphicon-remove"></i
+              ></span>
+            </td> -->
+            <td nowrap>
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-raised btn-success btn-sm"
+                  (click)="item.upload()"
+                  [disabled]="
+                    item.isReady || item.isUploading || item.isSuccess
+                  "
+                >
+                  <i class="ft-upload-cloud"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-raised btn-warning btn-sm"
+                  (click)="item.cancel()"
+                  [disabled]="!item.isUploading"
+                >
+                  <i class="ft-stop-circle"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-raised btn-danger btn-sm"
+                  (click)="item.remove()"
+                >
+                  <i class="ft-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <code>
+        {{ uploader | json }}
+      </code> -->
+
+      <div class="modal-footer">
+        <div class="col-12">
+          <div>
+            Progreso de cola:
+            <div class="progress">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                [ngStyle]="{ width: uploader.progress + '%' }"
+              ></div>
+            </div>
+          </div>
+          <div class="btn-group">
+            <button
+              type="button"
+              class="btn btn-raised btn-success btn-s"
+              (click)="uploader.uploadAll()"
+              [disabled]="!uploader.getNotUploadedItems().length"
+            >
+              <i class="ft-upload-cloud"></i> Subir todo
+            </button>
+            <button
+              type="button"
+              class="btn btn-raised btn-warning btn-s"
+              (click)="uploader.cancelAll()"
+              [disabled]="!uploader.isUploading"
+            >
+              <i class="ft-stop-circle"></i> Cancelar Todo
+            </button>
+            <button
+              type="button"
+              class="btn btn-raised btn-danger btn-s"
+              (click)="uploader.clearQueue()"
+              [disabled]="!uploader.queue.length"
+            >
+              <i class="ft-trash"></i> Eliminar
+              <!-- <button
+                type="button"
+                class="btn btn-secondary"
+                data-toggle="tooltip"
+                data-placement="top"
+                title=""
+              >
+                Button name
+              </button> -->
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

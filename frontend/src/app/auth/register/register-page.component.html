@@ -1,0 +1,89 @@
+<!--Registration Page Starts-->
+<section id="regestration">
+  <div class="container-fluid">
+    <div class="row full-height-vh m-0">
+      <div class="col-12 d-flex align-items-center justify-content-center">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body register-img">
+              <div class="row m-0">
+         
+                <div class="col-lg-12 col-md-12 pt-3 px-4 bg-white">
+                  <form [formGroup]="registerForm">
+                    <h4 class="card-title mb-2">Registro</h4>
+                    <p class="card-text mb-3">
+                      Bienvenido, por favor ingrese sus datos
+                    </p>
+                    <label for="first_name">Nombres</label>
+                    <input
+                      type="text"
+                      class="form-control mb-3"
+                      placeholder="Nombres"
+                      formControlName="first_name"
+                      id="first_name"
+                    />
+                    <label for="last_name">Apellidos</label>
+                    <input
+                      type="text"
+                      class="form-control mb-3"
+                      placeholder="Apellidos"
+                      formControlName="last_name"
+                      id="last_name"
+                    />
+                    <label for="last_name">Nº documento</label>
+                    <input
+                      type="text"
+                      class="form-control mb-3"
+                      placeholder="Apellidos"
+                      formControlName="n_documento"
+                      id="n_documento"
+                    />
+                    <label for="email_login">Email</label>
+                    <input
+                      type="email"
+                      class="form-control mb-3"
+                      placeholder="Email"
+                      formControlName="email"
+                      id="email_login"
+                    />
+                    <label for="password">Contraseña</label>
+                    <input
+                      type="password"
+                      class="form-control mb-3"
+                      placeholder="Password"
+                      formControlName="password"
+                      id="password"
+                    />
+                    <div class="fg-actions d-flex justify-content-between">
+                      <div class="login-btn">
+                      <button class="btn btn-outline-primary">
+                        <a
+                          [routerLink]="['/auth/login']"
+                          class="text-decoration-none"
+                          >Iniciar sesion</a
+                        >
+                      </button>
+                    </div>
+                      <div class="recover-pass">
+                        <button
+                          class="btn btn-primary"
+                          [disabled]="registerForm.invalid"
+                          (click)="register()"
+                        >
+                          <a class="text-decoration-none text-white"
+                            >Registrarse</a
+                          >
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--Registration Page Ends-->

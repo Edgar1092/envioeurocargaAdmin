@@ -1,0 +1,34 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="premiun == 1; else branOffices">
+      <div class="row justify-content-center">
+        <div class="col-md-12 txt-cntr"><h3><strong>Cursos para usuarios premiun</strong></h3></div>
+      </div><br><br>
+      <div class="row">
+        <div class="col-md-4">
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/x3LXM5vIACo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="col-md-4">
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/gwM5H_YPI_M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="col-md-4">
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/1B5IntTG-dI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+  
+
+
+      <!-- <app-time-per-client></app-time-per-client> -->
+    </div>
+    <ng-template #branOffices>
+      <div class="col-12 txt-cntr">
+        <p><h3>Para tener acceso a esta seccion debe ser socio</h3>
+      </div>
+    </ng-template>
+  </div>
+  <!-- <div class="row justify-content-center py-3 my-1">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <app-time-per-user></app-time-per-user>
+    </div>
+  </div> -->
+</div>

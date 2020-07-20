@@ -1,0 +1,102 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Usuarios Registrados</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                *ngIf="users$ | async as users"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Email</th>
+                    <th>Nombres y Apellidos</th>
+                    <!-- <th>Oficinas</th> -->
+                    <!-- <th>Roles</th> -->
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let user of users['data']
+                        | paginate
+                          : {
+                              itemsPerPage: itemsPerPage,
+                              currentPage: p,
+                              totaItems: users.num_rows
+                            };
+                      index as i
+                    "
+                  >
+                
+                    <td scope="row">{{ user.email }}</td>
+                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                    <!-- <td>{{ joinData(user.offices) }}</td> -->
+                    <!-- <td>{{ user.roles.name }}</td> -->
+                    <td>
+                      <div class="btn-group">
+                        <button
+                        ngbTooltip="Editar"
+                          type="button"
+                          class="btn btn-secondary"
+                          [routerLink]="['/admin/user/', user.id]"
+                        >
+                          <a class="ft-more-horizontal" text-info></a>
+                        </button>
+
+                        <button
+                        ngbTooltip="Eliminar"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="delete(user)"
+                        >
+                          <a class="ft-trash" style="color:white"></a>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  [(ngModel)]="itemsPerPage"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+                (pageChange)="p = $event"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+[09-Jun-2020 10:53:16 America/Lima] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/invers34/public_html/clients/Apinotaria/index.php on line 5

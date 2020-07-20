@@ -1,0 +1,79 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Historico de pago</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+           
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Referencia de pago</th>
+                    <th>Estatus</th>
+                    <th>Fecha</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let blog of (blogs$ | async)['data']
+                        | paginate
+                          : {
+                              itemsPerPage: itemsPerPage,
+                              currentPage: p,
+                              totalItems: (blogs$ | async)['total']
+                            }; 
+                          index as i
+                    "
+                  >
+                
+
+                    <td>{{ blog.referenciaPago }} </td>
+                    <td>{{ blog.estatus }} </td>
+                    <td>{{ blog.created_at }} </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

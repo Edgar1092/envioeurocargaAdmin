@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+
+/* @import url("assets/css/bootstrap.min.css"); */
+/* @import url("../src/assets/css/prism.min.css");
+@import url("../src/assets/css/sweetalert2.min.css");
+@import url("../src/assets/css/bootstrap-timepicker.min.css");
+@import url("../src/assets/css/wizard.css");
+@import url("../src/assets/css/leaflet.css");
+@import url("../src/assets/css/jquery-jvectormap-2.0.3.css");
+@import url("../src/assets/css/ng2-toastr.min.css");
+@import url("../src/assets/css/nouislider.min.css");
+@import url("../src/assets/css/data-table/index.css");
+@import url("../src/assets/css/data-table/icons.css");
+@import url("../src/assets/css/demo.css"); */
+
+@import '~ngx-toastr/toastr';
+
+/* @import '~ngx-toastr/toastr-bs4-alert'; */
+/* 
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~ngx-toastr/toastr-bs4-alert'; */
+
+.ng-valid[required],
+.ng-valid.required {
+  border-left: 5px solid #42a948; /* green */
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #f4c269; /* blue */
+}

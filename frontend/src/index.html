@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="Description" content="Travesias mundiales"/>
+
+    <title>EuroCargas</title>
+    <base href="/"/>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="assets/fonts/feather/style.min.css" rel="stylesheet"/>
+    <link href="assets/fonts/simple-line-icons/style.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900|Montserrat:300,400,500,600,700,800,900" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="assets/vendor/pace/themes/black/pace-theme-flash.css"/>
+    <link rel="manifest" href="manifest.json"/>
+     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async="async"></script>
+    <!--<script>
+      var OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: 'fd50547d-6d5f-466a-b3f2-5a946dfc0b2d',
+          autoRegister: true,
+          allowLocalhostAsSecureOrigin: true,
+          notifyButton: {
+            enable: false
+          }
+        });
+      });
+      OneSignal.showNativePrompt();
+    </script> -->
+    <style type="text/css">
+      .pace .pace-activity {
+        top: 19px;
+        right: 19px;
+        display: none;
+      }
+      .page-loading {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        overflow: hidden;
+        background: rgba(51, 51, 51, 1);
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        z-index: -1;
+      }
+      .loading-icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 38px;
+        height: 38px;
+        margin-left: -19px;
+        margin-top: -19px;
+      }
+      app-root:empty ~ .page-loading {
+        opacity: 1;
+        z-index: 1;
+      }
+    </style>
+
+    <meta name="theme-color" content="#1976d2"/>
+    <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1976d2">
+</head>
+  <body>
+    <app-root></app-root>
+    <div class="page-loading">
+      <img src="assets/img/oval.svg" class="loading-icon" alt="oval"/>
+    </div>
+    <noscript>Please enable JavaScript to continue using this application.</noscript>
+  </body>
+</html>
