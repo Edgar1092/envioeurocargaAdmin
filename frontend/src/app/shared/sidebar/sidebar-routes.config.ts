@@ -78,7 +78,7 @@ export const ADMIN_ROUTES: RouteInfo[] = [
   // },
   {
     path: '/Listas/',
-    title: 'Accion',
+    title: 'Listas',
     icon: 'ft-user',
     isExternalLink: false,
     class: 'has-sub',

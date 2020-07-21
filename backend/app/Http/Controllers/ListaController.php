@@ -185,6 +185,44 @@ class ListaController extends Controller
         }
     }
 
+      // Modificar estatus de las listas 
+      function activarInactivar(Request $request){
+   
+         try{
+   
+            DB::beginTransaction(); // Iniciar transaccion de la base de datos
+            $lista = Lista::find($request->id);
+     
+            $lista->estatus = $request->status;
+            
+            $lista->save();
+
+            if($request->status==1){
+                $todos=Lista::where('id','!=',$request->id)->get();
+
+                foreach($todos as $individual){
+                    $lista1 = Lista::find($individual->id);
+     
+                    $lista1->estatus = 0;
+                    
+                    $lista1->save();
+                }
+            }
+            DB::commit(); // Guardamos la transaccion
+            return response()->json($lista,200);
+        }catch (\Exception $e) {
+            if($e instanceof ValidationException) {
+                return response()->json($e->errors(),402);
+            }
+            DB::rollback(); // Retrocedemos la transaccion
+            Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+            return response()->json([
+                'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+            ], 500);
+        }
+    }
+
+
 
     // Eliminar lista
     function delete(Request $request){

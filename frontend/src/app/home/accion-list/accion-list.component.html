@@ -67,6 +67,24 @@
                         >
                           <a class="ft-more-horizontal" text-info></a>
                         </button>
+                        <button
+                        *ngIf="blog.estatus==0"
+                        ngbTooltip="Activar"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="activar(blog)"
+                        >
+                          <a class="ft-play" style="color:white"></a>
+                        </button>
+                        <button
+                        *ngIf="blog.estatus==1"
+                        ngbTooltip="Inactivar"
+                          type="button"
+                          class="btn btn-warning"
+                          (click)="inactivar(blog)"
+                        >
+                          <a class="ft-slash" style="color:white"></a>
+                        </button>
                       </div>
                     </td>
                   </tr>

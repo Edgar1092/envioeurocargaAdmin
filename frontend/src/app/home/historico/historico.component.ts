@@ -93,43 +93,43 @@ export class HistoricoComponent implements OnInit {
 
   }
 
-  aprobar(infor) {
-    this.formBlog.controls['idUsuarioFk'].setValue(infor.idUsuarioFk);
-    this.formBlog.controls['id'].setValue(infor.id);
-    this.formBlog.controls['estatus'].setValue('aprobado');
-    // console.log(infor)
-    if (this.formBlog.valid) {
-      let d = this.formBlog.value;
+  // aprobar(infor) {
+  //   this.formBlog.controls['idUsuarioFk'].setValue(infor.idUsuarioFk);
+  //   this.formBlog.controls['id'].setValue(infor.id);
+  //   this.formBlog.controls['estatus'].setValue('aprobado');
+  //   // console.log(infor)
+  //   if (this.formBlog.valid) {
+  //     let d = this.formBlog.value;
   
-      this.AccionService.aprobar(this.formBlog.value).subscribe(response => {
-        if (response) {
-          this.toast.success("Pago aprobado");
-          this.AccionService.get();
-        } else {
-          this.toast.error(JSON.stringify(response));
-        }
-      });
-    }
-    // console.log(this.formBlog.value);
-  }
+  //     this.AccionService.aprobar(this.formBlog.value).subscribe(response => {
+  //       if (response) {
+  //         this.toast.success("Pago aprobado");
+  //         this.AccionService.get();
+  //       } else {
+  //         this.toast.error(JSON.stringify(response));
+  //       }
+  //     });
+  //   }
+  //   // console.log(this.formBlog.value);
+  // }
 
-  rechazar(infor) {
-    this.formBlog.controls['idUsuarioFk'].setValue(infor.idUsuarioFk);
-    this.formBlog.controls['id'].setValue(infor.id);
-    this.formBlog.controls['estatus'].setValue('rechazado');
-    if (this.formBlog.valid) {
-      let d = this.formBlog.value;
+  // rechazar(infor) {
+  //   this.formBlog.controls['idUsuarioFk'].setValue(infor.idUsuarioFk);
+  //   this.formBlog.controls['id'].setValue(infor.id);
+  //   this.formBlog.controls['estatus'].setValue('rechazado');
+  //   if (this.formBlog.valid) {
+  //     let d = this.formBlog.value;
   
-      this.AccionService.aprobar(this.formBlog.value).subscribe(response => {
-        if (response) {
-          this.toast.success("Pago rechazado");
-          this.AccionService.get();
-        } else {
-          this.toast.error(JSON.stringify(response));
-        }
-      });
-    }
-    // console.log(this.formBlog.value);
-  }
+  //     this.AccionService.aprobar(this.formBlog.value).subscribe(response => {
+  //       if (response) {
+  //         this.toast.success("Pago rechazado");
+  //         this.AccionService.get();
+  //       } else {
+  //         this.toast.error(JSON.stringify(response));
+  //       }
+  //     });
+  //   }
+  //   // console.log(this.formBlog.value);
+  // }
 
 }

@@ -42,8 +42,8 @@ export class AccionService {
     });
   }
 
-  aprobar(params) {
-    return this.http.post(`lista/aprobar`, params);
+  activarInactivar(params) {
+    return this.http.post(`lista/activarInactivar`, params);
   }
 
   delete(id) {
