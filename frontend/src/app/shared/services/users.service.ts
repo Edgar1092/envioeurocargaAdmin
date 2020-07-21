@@ -21,31 +21,14 @@ export class UsersService {
     return this.http.get(`users/${index}`);
   }
 
-  add(params: {
-    email: string;
-    first_name: string;
-    last_name: string;
-    password: string;
-    'office_id[]': number[];
-    'roles[]': string[];
-    avatar?: string;
-  }) {
-    return this.http.post(`users`, params);
+  add(params) {
+    return this.http.post(`users/create`, params);
   }
 
   update(
-    id: number,
-    params: {
-      email: string;
-      first_name: string;
-      last_name: string;
-      password: string;
-      'office_id[]': number[];
-      'roles[]': string[];
-      avatar?: string;
-    }
+    params
   ) {
-    return this.http.put(`users/${id}`, params);
+    return this.http.post(`users/update`, params);
   }
 
   delete(id: number) {

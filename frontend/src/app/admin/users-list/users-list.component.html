@@ -9,9 +9,6 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-12">
-              <app-filter (onFilter)="onFilter($event)"></app-filter>
-            </div>
             <div class="col-12 table-responsive">
               <table
                 class="table table-striped"
@@ -20,9 +17,7 @@
                 <thead class="thead-inverse">
                   <tr>
                     <th>Email</th>
-                    <th>Nombres y Apellidos</th>
-                    <!-- <th>Oficinas</th> -->
-                    <!-- <th>Roles</th> -->
+                    <th>Nombres</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -41,7 +36,7 @@
                   >
                 
                     <td scope="row">{{ user.email }}</td>
-                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                    <td>{{ user.name }}</td>
                     <!-- <td>{{ joinData(user.offices) }}</td> -->
                     <!-- <td>{{ user.roles.name }}</td> -->
                     <td>

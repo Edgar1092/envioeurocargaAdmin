@@ -24,7 +24,11 @@ Route::post('auth/login','UserController@auth')->middleware('cors');
  Route::post('auth/register','UserController@create');
   Route::post('auth/users/update','UserController@update');
     Route::delete('auth/users/delete/{idUser}','UserController@delete');
-
+	Route::get('users','UserController@getAll');
+	Route::get('users/{id}','UserController@get');
+	Route::post('users/update','UserController@update');
+	Route::post('users/create','UserController@create');
+	Route::delete('users/{id}','UserController@delete');
 
 Route::group(['middleware' => ['cors']], function () {// Todo lo que esta adentro de este middleware requeire auteticacion
 

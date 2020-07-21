@@ -25,8 +25,49 @@ class UserController extends Controller
 {
     private $NAME_CONTROLLER = 'UserController';
     // Obtener todos los usuarios //
+    function getAll(Request $request){
+        try{
+            $request->validate([
+                'per_page'      =>  'nullable|integer',
+                'page'          =>  'nullable|integer'
+            ]);  
+            $per_page = (!empty($request->per_page)) ? $request->per_page : User::count();
+            $result = User::orderBy('id','desc')->paginate($per_page);
+            $response = $result;   
 
+            if($result->isEmpty()){
+                return response()->json([
+                    'msj' => 'No se encontraron registros.',
+                ], 200); 
+            }
+            return response()->json($response);
+        }catch (\Exception $e) {
+            Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+            return response()->json([
+                'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+            ], 500);
+        }
+    }
+    function get($id){
+        try{
 
+            DB::beginTransaction(); // Iniciar transaccion de la base de datos
+            $result = User::find($id);
+            $response = $result;   
+
+            DB::commit(); // Guardamos la transaccion
+            return response()->json($response);
+        }catch (\Exception $e) {
+            if($e instanceof ValidationException) {
+                return response()->json($e->errors(),402);
+            }
+            DB::rollback(); // Retrocedemos la transaccion
+            Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+            return response()->json([
+                'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+            ], 500);
+        }
+    }
     // Crear usuario //
     function create(Request $request){
         try{
@@ -66,31 +107,22 @@ class UserController extends Controller
     // Modificar usuarios
     function update(Request $request){
          try{
-            $userVal = User::find($request->idUser);      
+            $userVal = User::find($request->id);      
             // Validador //
             $request->validate([
-                'idUser' => 'required|Numeric',
+                'id' => 'required|Numeric',
                 'name' => 'required|max:124',
-                'email' => 'required|email|max:124',
-                'changePassword' => 'required'
+                'email' => 'required|email|max:124'
             ]);  
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
-            $user = User::find($request->idUser);
+            $user = User::find($request->id);
             $user->name  = $request->name;
             $user->email = $request->email;
-            if($request->changePassword !=false){
-            $user->password = Hash::make($request->pswdNw);
+            if($user->password !=''){
+            $user->password = Hash::make($request->password);
             }
             $user->save();
             DB::commit(); // Guardamos la transaccion
-            $email=$request->email;
-            $data = [
-                'Nombre' => $request->name,
-                ];
-            Mail::send('Mail.activate',$data, function($msj) use ($email){
-                $msj->subject('Activación de cuenta');
-                $msj->to($email);
-             });
 
             return response()->json($user,200);
         }catch (\Exception $e) {
@@ -123,7 +155,7 @@ class UserController extends Controller
     function delete($idUser){
         try{
             if($idUser < 1){
-                return response()->json(['message' => 'idUser is required.',], 402);
+                return response()->json(['message' => 'id is required.',], 402);
             }
             $confirm = User::find($idUser);
 
@@ -132,8 +164,7 @@ class UserController extends Controller
             // }
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
             $user = User::find($idUser);
-            $user->idStatusKf  = 3;
-            $user->save();
+            $user->delete();
             DB::commit(); // Guardamos la transaccion
             return response()->json("User Delete",200);
         }catch (\Exception $e) {
@@ -153,7 +184,7 @@ class UserController extends Controller
     function first($idUser){
         try{
             if($idUser < 1){
-                return response()->json(['message' => 'idUser is required.',], 402);
+                return response()->json(['message' => 'id is required.',], 402);
             }
              DB::beginTransaction(); // Iniciar transaccion de la base de datos
              $user = User::find($idUser);
@@ -170,49 +201,6 @@ class UserController extends Controller
              ], 500);
          }
     }
-
-
-    // Autenticar usuarios //
-    // function auth(Request $request){
-    //     try{
-    //         var_dump('aqui esta');
-    //         $request->validate([
-    //             'password' => 'required|max:124',
-    //             'email' => 'required|email|max:124',
-    //             ]);
-    //         DB::beginTransaction(); // Iniciar transaccion de la base de datos
-    //         $user =  User::where('tbl_users.email',$request->email)->first();
-    //         if($user == null){
-    //             return response()->json(['message' => 'User or Password invalid.',], 402);
-    //         }       
-         
-    //         $user->token = str_random(30);
-    //         $user->save();
-    //         DB::commit(); // Guardamos la transaccion
-    //         if($user && Hash::check($request->password,$user->password)){
-           
-    //                 $response = [
-    //                     'msj'   => 'User',
-    //                     'user' => $user,
-
- 
-    //                 ];  
-               
-    //             return response()->json($response,200);
-    //         }else{
-    //             return response()->json(['message' => 'User or Password invalid.',], 402);
-    //         }
-    //     }catch (\Exception $e) {
-    //         if($e instanceof ValidationException) {
-    //             return response()->json($e->errors(),402);
-    //         }
-    //         DB::rollback(); // Retrocedemos la transaccion
-    //         Log::error('Error in '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
-    //         return response()->json([
-    //             'message' => 'Error.',
-    //         ], 500);
-    //     }
-    // }
 
     function auth(Request $request){
         try{

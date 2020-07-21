@@ -31,7 +31,7 @@ export class UsersListComponent implements OnInit {
 
   delete(user: any) {
     const confirm = swal.fire({
-      title: `Borrar al usuario ${user.first_name} ${user.last_name}`,
+      title: `Borrar al usuario ${user.name}`,
       text: 'Esta acción no se puede deshacer',
       type: 'question',
       showConfirmButton: true,

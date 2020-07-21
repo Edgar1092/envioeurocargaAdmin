@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -35,7 +35,11 @@ export class AccionService {
   }
 
   add(params) {
-    return this.http.post(`lista/create`, params);
+    return this.http.post(`lista/create`, params, {
+      headers: new HttpHeaders({
+        "Accept" : "application/json",
+      })
+    });
   }
 
   aprobar(params) {

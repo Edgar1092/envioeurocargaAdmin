@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lista;
+use App\Archivo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -110,7 +111,27 @@ class ListaController extends Controller
                 'hasta' => $request->hasta,
 
             ]);
+            if($request->archivos){
+              $archivos = json_decode($request->archivos);
+              foreach ($archivos as $key => $value) {
+                if($value->tipo != 'video/mp4'){
+                    $resized_image = Image::make($value->imagen_guardar)->stream('png', 60);
+                    Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
+                    $nombreImagen=$value->nombre;
+                }else{
+                    $resized_image = base64_decode($value->imagen_guardar);
+                    Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
+                    $nombreImagen=$value->nombre;
+                }
 
+                $arch = Archivo::create([
+                    'ruta'    => $nombreImagen,
+                    'id_lista'     => $lista->id
+    
+                ]);
+              } 
+            }
+            
             DB::commit(); // Guardamos la transaccion
             return response()->json($lista,201);
         }catch (\Exception $e) {

@@ -31,3 +31,11 @@
 .ng-invalid:not(form) {
   border-left: 5px solid #f4c269; /* blue */
 }
+
+.text-center{
+  text-align: center !important;
+}
+
+.margin-b-10{
+  margin-bottom: 10px !important;
+}

@@ -21,6 +21,7 @@ export class AccionAddComponent implements OnInit {
   nombreImagen
   urlImagen
  idUser;
+ filesSelect:any = []
 
   constructor(
     private fb: FormBuilder,
@@ -38,6 +39,7 @@ export class AccionAddComponent implements OnInit {
       desde: ['', Validators.required],
       hasta: ['', Validators.required],
       status: ['', Validators.required],
+      archivo:['']
 
     });
    }
@@ -49,8 +51,14 @@ export class AccionAddComponent implements OnInit {
     this.formBlog.controls['id'].setValue(this.idUser);
     if (this.formBlog.valid) {
       let d = this.formBlog.value;
- 
-      this.AccionService.add(this.formBlog.value).subscribe(response => {
+      let formData:FormData = new FormData();
+      formData.append('nombre',this.formBlog.get('nombre').value);
+      formData.append('descripcion',this.formBlog.get('descripcion').value);
+      formData.append('desde',this.formBlog.get('desde').value);
+      formData.append('hasta',this.formBlog.get('hasta').value);
+      formData.append('status',this.formBlog.get('status').value);
+      formData.append('archivos',JSON.stringify(this.filesSelect));
+      this.AccionService.add(formData).subscribe(response => {
         if (response) {
           
           this.toast.success(response['message']);
@@ -70,6 +78,35 @@ export class AccionAddComponent implements OnInit {
     }
   }
 
+  onFileChange(event) {
+    const reader = new FileReader();
+    let fileList: FileList = event.target.files;
+    let uploadedImage: Blob;
+ 
+    if(event.target.files && event.target.files.length) {
+      
+      const [file2] = event.target.files;
+      let file: File = fileList[0];
+      
+      reader.readAsDataURL(file2);
+      // console.log(file2);
+        reader.onload = () => {
+            
+            this.imagen = reader.result;
+            this.nombreImagen = file.name;
+            var res = this.imagen.split(",");
+            this.filesSelect.push({nombre:this.nombreImagen,imagen_guardar:res[1],imagen_mostrar:this.imagen,tipo:file.type});
+            console.log(this.filesSelect)
+        // need to run CD since file load runs outside of zone
+        this.cd.markForCheck();
+        };
+    }
+  }
+
+  del(id){
+    this.filesSelect.splice(id, 1);
+    console.log(this.filesSelect);
+  }
 
 
 }

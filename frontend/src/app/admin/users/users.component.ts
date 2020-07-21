@@ -30,9 +30,8 @@ export class UsersComponent implements OnInit {
     this.formUser = this.fb.group({
       id: [''],
       email: ['', Validators.required],
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      password: ['', Validators.required],
+      name: ['', Validators.required],
+      password: [''],
       roles: ['1'],
       avatar: ['']
     });
@@ -54,13 +53,7 @@ export class UsersComponent implements OnInit {
           this.userToEdit$.next(user);
           this.formUser.controls['id'].setValue(user['id']);
           this.formUser.controls['email'].setValue(user['email']);
-          this.formUser.controls['first_name'].setValue(user['first_name']);
-          this.formUser.controls['last_name'].setValue(user['last_name']);
-          // this.formUser.controls['password'].setValue(user['password']);
-          this.formUser.controls['roles'].setValue(
-            user['roles'].map(rol => rol['id'])
-          );
-          this.formUser.controls['avatar'].setValue(user['avatar']);
+          this.formUser.controls['name'].setValue(user['name']);
         }
       });
   }
@@ -89,7 +82,7 @@ export class UsersComponent implements OnInit {
   edit() {
     if (this.formUser.valid) {
       const id = this.formUser.controls['id'].value;
-      this.userService.update(id, this.formUser.value).subscribe(response => {
+      this.userService.update(this.formUser.value).subscribe(response => {
         if (response) {
           this.toast.success(response['message']);
           this.router.navigate(['/admin/users/list']);

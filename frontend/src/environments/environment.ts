@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-    apiUrl: 'http://localhost:8000/api',
+    apiUrl: 'http://localhost/envioeurocargaAdmin/backend/public/api',
   //  apiUrl: '',
   serviceWorker: false
 };

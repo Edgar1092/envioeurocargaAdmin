@@ -81,11 +81,8 @@ export class AuthService {
 
   isAdmin(): boolean {
     const roles = JSON.parse(localStorage.getItem('roles'));
-    if (roles) {
-      const admin = roles.find(rol => rol['name'] === 'Administrador');
-      if (admin) {
+    if (roles === 'Administrador') {
         return true;
-      }
     }
     return false;
   }

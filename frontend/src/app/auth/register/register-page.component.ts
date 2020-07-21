@@ -21,12 +21,9 @@ export class RegisterPageComponent implements OnInit  {
     private auth: AuthService,
     private toast: ToastrService) { 
       this.registerForm = this.fb.group({
-        first_name: ['', Validators.required],
-        last_name: ['', Validators.required],
+        name: ['', Validators.required],
         email: ['', Validators.required],
-        n_documento: ['', Validators.required],
-        password: ['', Validators.required],
-        link2: ['']
+        password: ['', Validators.required]
       });
     }
     ngOnInit() {

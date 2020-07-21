@@ -28,24 +28,12 @@
                 </div>
                 <div class="col-auto">
                   <div class="form-group">
-                    <label for="first_name">Nombres</label>
+                    <label for="name">Nombres</label>
                     <input
                       type="text"
                       class="form-control"
-                      formControlName="first_name"
-                      id="first_name"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-auto">
-                  <div class="form-group">
-                    <label for="lastName">Apellidos</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      formControlName="last_name"
-                      id="lastName"
+                      formControlName="name"
+                      id="name"
                       required
                     />
                   </div>
@@ -58,31 +46,8 @@
                       class="form-control"
                       formControlName="password"
                       id="password"
-                      required
+                      [required]="(userToEdit$ | async)?.id ? false : true"
                     />
-                  </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col-4">
-                  <div class="form-group">
-                    <label for="roles">Roles</label>
-                    <select
-                      class="form-control"
-                      name="roles"
-                      id="roles"
-                      formControlName="roles"
-                      multiple
-                      *ngIf="roles$ | async as roles"
-                      required
-                    >
-                      <option
-                        *ngFor="let role of roles['data']; index as i"
-                        for
-                        [value]="role.id"
-                        >{{ role.name }}</option
-                      >
-                    </select>
                   </div>
                 </div>
               </div>

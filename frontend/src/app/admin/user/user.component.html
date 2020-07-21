@@ -4,7 +4,7 @@
       <div class="card-header">
         <div class="card-title">
           <h2>
-            <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+            <strong>{{ user.name }}</strong>
           </h2>
         </div>
       </div>
@@ -15,28 +15,6 @@
               <h3>
                 Correo: <strong>{{ user.email }}</strong>
               </h3>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <div class="card-subtitle">
-                Roles del Usuario
-              </div>
-              <ul class="list-group">
-                <li *ngFor="let rol of user.roles" class="list-group-item">
-                  {{ rol.name }}
-                </li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <div class="card-subtitle">
-                Oficinas Asignadas
-              </div>
-              <ul class="list-group">
-                <li *ngFor="let office of user.offices" class="list-group-item">
-                  {{ office.name }}
-                </li>
-              </ul>
             </div>
           </div>
           <div class="row">

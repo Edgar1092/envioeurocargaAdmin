@@ -45,14 +45,14 @@ export class NotificationSidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user'));
-    this.auth.main_office$.subscribe(() => {
-      this.notifications$ = this.notificationsService.get({
-        user_id: user.id,
-        order_by: 'created_at',
-        order_type: 'desc',
-        limit: 5
-      });
-    });
+    // this.auth.main_office$.subscribe(() => {
+    //   this.notifications$ = this.notificationsService.get({
+    //     user_id: user.id,
+    //     order_by: 'created_at',
+    //     order_type: 'desc',
+    //     limit: 5
+    //   });
+    // });
     // alert('!');
   }
   ngOnDestroy() {

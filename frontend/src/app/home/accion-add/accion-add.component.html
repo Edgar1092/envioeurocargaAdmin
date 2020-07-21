@@ -74,31 +74,37 @@
                     </select>
                   </div>
                 </div>
-
-              </div>
-              <!-- <div class="form-row">
-                <div class="col-4">
+                <div class="col-6">
                   <div class="form-group">
-                    <label for="roles">Roles</label>
-                    <select
+                    <label for="file">Agregar imagen o video</label>
+                    <input
+                      type="file"
+                      accept="image/jpeg, image/png, .jpg, .jpeg, .png, .mp4"
                       class="form-control"
-                      name="roles"
-                      id="roles"
-                      formControlName="roles"
-                      multiple
-                      *ngIf="roles$ | async as roles"
+                      formControlName="archivo"
+                      (change)="onFileChange($event)"
+                      id="archivo"
                       required
-                    >
-                      <option
-                        *ngFor="let role of roles['data']; index as i"
-                        for
-                        [value]="role.id"
-                        >{{ role.name }}</option
-                      >
-                    </select>
+                    />
                   </div>
                 </div>
-              </div> -->
+              </div>
+              <div class="row">
+                <div *ngFor="let im of filesSelect; let i = index" class="col-md-2 text-center">
+                
+                  <img *ngIf="im.tipo != 'video/mp4'" [src]="im.imagen_mostrar" width="70" height="auto" class="margin-b-10">
+                  <img *ngIf="im.tipo == 'video/mp4'" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
+                
+                <br>
+                <button
+                    type="button"
+                    class="btn btn-raised btn-danger" 
+                    (click)="del(i)"
+                  >
+                  <a class="ft-trash" style="color:white"></a>
+                </button>
+                </div>
+                </div>
               <div class="row">
                 <div
                   class="col-auto my-2"
