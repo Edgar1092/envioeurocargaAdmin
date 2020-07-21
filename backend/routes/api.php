@@ -34,7 +34,7 @@ Route::group(['middleware' => ['cors']], function () {// Todo lo que esta adentr
 	Route::get('lista/get','ListaController@getAll');
 	Route::post('lista/create','ListaController@create');
 	Route::post('lista/update','ListaController@update');
-	Route::delete('lista/delete/{id}','ListaController@delete');
+	Route::post('lista/delete','ListaController@delete');
 
 
 });

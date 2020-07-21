@@ -32,8 +32,12 @@ export class AccionAddComponent implements OnInit {
     private cd: ChangeDetectorRef,
   ) {
     this.formBlog = this.fb.group({
-      idUsuarioFk: [''],
-      referenciaPago: ['', Validators.required],
+      id: [''],
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      desde: ['', Validators.required],
+      hasta: ['', Validators.required],
+      status: ['', Validators.required],
 
     });
    }
@@ -42,7 +46,7 @@ export class AccionAddComponent implements OnInit {
   add() {
     let usuario= JSON.parse(localStorage.getItem('user'));
     this.idUser=usuario.id;
-    this.formBlog.controls['idUsuarioFk'].setValue(this.idUser);
+    this.formBlog.controls['id'].setValue(this.idUser);
     if (this.formBlog.valid) {
       let d = this.formBlog.value;
  
@@ -50,7 +54,7 @@ export class AccionAddComponent implements OnInit {
         if (response) {
           
           this.toast.success(response['message']);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home/accion/list']);
         } else {
           this.toast.error(JSON.stringify(response));
         }
@@ -66,21 +70,6 @@ export class AccionAddComponent implements OnInit {
     }
   }
 
-  aprobar() {
-    if (this.formBlog.valid) {
-      let d = this.formBlog.value;
-  
-      this.AccionService.aprobar(this.formBlog.value).subscribe(response => {
-        if (response) {
-          this.toast.success(response['message']);
-          this.router.navigate(['/admin/parascore/list']);
-        } else {
-          this.toast.error(JSON.stringify(response));
-        }
-      });
-    }
-    // console.log(this.formBlog.value);
-  }
 
 
 }

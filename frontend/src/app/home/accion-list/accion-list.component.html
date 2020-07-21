@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-title">
-            <h2>Pagos de accion</h2>
+            <h2>Listas de reproduccion</h2>
           </div>
         </div>
         <div class="card-body">
@@ -18,8 +18,9 @@
               >
                 <thead class="thead-inverse">
                   <tr>
-                    <th>Email</th>
-                    <th>Referencia de pago</th>
+                    <th>Nombre</th>
+                    <th>Desde</th>
+                    <th>Hasta</th>
                     <th>Estatus</th>
                     <!-- <th>Oficinas</th> -->
                     <!-- <th>Roles</th> -->
@@ -40,31 +41,23 @@
                     "
                   >
                 
-                    <td scope="row">{{ blog.usuario.email }}</td>
-                    <td>{{ blog.referenciaPago }} </td>
-                    <td>{{ blog.estatus }} </td>
+                    <td scope="row">{{ blog.nombre }}</td>
+                    <td>{{ blog.desde }} </td>
+                    <td>{{ blog.hasta }} </td>
+                    <td>{{ blog.estatus== 0 ? "Inactivo" : "Activo" }} </td>
                     <!-- <td>{{ joinData(user.offices) }}</td> -->
                     <!-- <td>{{ user.roles.name }}</td> -->
                     <td>
                       <div class="btn-group">
-                        <button
-                        *ngIf="blog.estatus=='solicitando'"
-                        ngbTooltip="Aprobar pago"
-                          type="button"
-                          
-                          class="btn btn-success"
-                          (click)="aprobar(blog)"
-                        >
-                          <a class="ft-check" style="color: white;" text-info></a>
-                        </button>
+                    
 
                         <button
-                        ngbTooltip="Rechazar pago"
+                        ngbTooltip="Eliminar"
                           type="button"
                           class="btn btn-danger"
-                          (click)="rechazar(blog)"
+                          (click)="eliminar(blog)"
                         >
-                          <a class="ft-x" style="color:white"></a>
+                          <a class="ft-trash" style="color:white"></a>
                         </button>
                       </div>
                     </td>

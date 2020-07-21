@@ -17,7 +17,7 @@ class Lista extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre','descripcion', 'status','desde','hasta'
+        'nombre','descripcion', 'estatus','desde','hasta'
     ];
 
     // protected $appends = [

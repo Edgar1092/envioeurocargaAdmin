@@ -44,9 +44,9 @@ export class AccionListComponent implements OnInit {
       this.loadInitialData(param);
   }
 
-  delete(user: any) {
+  eliminar(blog: any) {
     const confirm = swal.fire({
-      title: `Borrar al usuario ${user.first_name} ${user.last_name}`,
+      title: `Borrar la lista ${blog.nombre}`,
       text: 'Esta acción no se puede deshacer',
       type: 'question',
       showConfirmButton: true,
@@ -58,10 +58,17 @@ export class AccionListComponent implements OnInit {
 
     from(confirm).subscribe(r => {
       if (r['value']) {
-        this.AccionService.delete(user.id).subscribe(response => {
+        this.AccionService.delete(blog.id).subscribe(response => {
           if (response) {
             this.toast.success(response['message']);
-            this.AccionService.get();
+            let param;
+            if(this.p)
+              { 
+                param={page:this.p,per_page:this.itemsPerPage};
+              }else{
+                param={page:1,per_page:this.itemsPerPage};
+              }
+              this.loadInitialData(param);
           } else {
             this.toast.error(JSON.stringify(response));
           }

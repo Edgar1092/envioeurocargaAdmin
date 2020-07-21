@@ -5,7 +5,7 @@
         <div class="card-header">
           <div class="card-title">
             <h2>
-              Comprobante de pago
+              Lista
             </h2>
           </div>
         </div>
@@ -13,16 +13,65 @@
           <div class="card-content">
             <form [formGroup]="formBlog">
               <div class="form-row align-items-end">
-                <div class="col-12">
+                <div class="col-6">
                   <div class="form-group">
-                    <label for="email">Referencia de pago</label>
+                    <label for="email">Nombre de la lista</label>
                     <input
                       type="text"
                       class="form-control"
-                      formControlName="referenciaPago"
-                      id="referenciaPago"
+                      formControlName="nombre"
+                      id="nombre"
                       required
                     />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Descripcion</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="descripcion"
+                      id="descripcion"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Desde</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      formControlName="desde"
+                      id="desde"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Hasta</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      formControlName="hasta"
+                      id="hasta"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Estatus</label>
+                    <select class="form-control" formControlName="status">
+                      <option value="0">
+                        Inactivo
+                      </option>
+                      <option value="1">
+                        Activo
+                      </option>
+                    </select>
                   </div>
                 </div>
 

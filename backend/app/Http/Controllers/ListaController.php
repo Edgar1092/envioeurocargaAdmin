@@ -90,22 +90,24 @@ class ListaController extends Controller
 
     // Crear noticia //
     function create(Request $request){
-        if($request->imagen!=''){
-            $nombreImagen=time().$request->nombre_imagen;
-            $resized_image = Image::make($request->imagen)->stream('png', 60);
+        // if($request->imagen!=''){
+        //     $nombreImagen=time().$request->nombre_imagen;
+        //     $resized_image = Image::make($request->imagen)->stream('png', 60);
             
-            Storage::disk('local')->put('\\public\\noticias\\'.$nombreImagen, $resized_image); // check return for success and failure
-        }else{
-            $nombreImagen='';
+        //     Storage::disk('local')->put('\\public\\noticias\\'.$nombreImagen, $resized_image); // check return for success and failure
+        // }else{
+        //     $nombreImagen='';
            
-        }
+        // }
         try{
-         
+            
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
             $lista = Lista::create([
-                'titulo'    => $request->titulo,
+                'nombre'    => $request->nombre,
                 'descripcion'     => $request->descripcion,
-                'imagen'  => $nombreImagen
+                'estatus' => $request->status,
+                'desde' => $request->desde,
+                'hasta' => $request->hasta,
 
             ]);
 
@@ -127,22 +129,25 @@ class ListaController extends Controller
    
     // Modificar listas
     function update(Request $request){
-        if($request->imagen!=''){
-            $nombreImagen=time().$request->nombre_imagen;
-            $resized_image = Image::make($request->imagen)->stream('png', 60);
+        // if($request->imagen!=''){
+        //     $nombreImagen=time().$request->nombre_imagen;
+        //     $resized_image = Image::make($request->imagen)->stream('png', 60);
             
-            Storage::disk('local')->put('\\public\\listas\\'.$nombreImagen, $resized_image); // check return for success and failure
-        }else{
-            $nombreImagen='';
+        //     Storage::disk('local')->put('\\public\\listas\\'.$nombreImagen, $resized_image); // check return for success and failure
+        // }else{
+        //     $nombreImagen='';
            
-        }
+        // }
          try{
-        
+   
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
             $lista = Lista::find($request->id);
-            $lista->titulo  = $request->titulo;
+            $lista->titulo  = $request->nombre;
             $lista->descripcion = $request->descripcion;
-            $lista->imagen = $nombreImagen;
+            $lista->desde = $request->desde;
+            $lista->hasta = $request->hasta;
+            $lista->estatus = $request->status;
+            
             $lista->save();
             DB::commit(); // Guardamos la transaccion
             return response()->json($lista,200);
@@ -160,11 +165,12 @@ class ListaController extends Controller
 
 
     // Eliminar lista
-    function delete($id){
+    function delete(Request $request){
         try{
 
+            // var_dump('este es el id'.$request->id);
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
-            $lista = Lista::find($id);
+            $lista = Lista::find($request->id);
             $lista->delete();
             DB::commit(); // Guardamos la transaccion
             return response()->json("lista Delete",200);

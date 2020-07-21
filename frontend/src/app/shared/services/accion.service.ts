@@ -18,7 +18,7 @@ export class AccionService {
       });
     }
     this.http
-      .get<any[]>(`accion/get`, { params: parseParams })
+      .get<any[]>(`lista/get`, { params: parseParams })
       .subscribe(preguntas => {
         this.blogs$.next(preguntas);
       });
@@ -31,19 +31,19 @@ export class AccionService {
 
   show(index: number) {
     let params = {id : index}
-    return this.http.post(`accion/getAccion`, params);
+    return this.http.post(`lista/getAccion`, params);
   }
 
   add(params) {
-    return this.http.post(`accion/create`, params);
+    return this.http.post(`lista/create`, params);
   }
 
   aprobar(params) {
-    return this.http.post(`accion/aprobar`, params);
+    return this.http.post(`lista/aprobar`, params);
   }
 
   delete(id) {
     let params = {id : id}
-    return this.http.post(`accion/delete`,params);
+    return this.http.post(`lista/delete`,params);
   }
 }
