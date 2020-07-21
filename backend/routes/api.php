@@ -33,7 +33,7 @@ Route::post('auth/login','UserController@auth')->middleware('cors');
 Route::group(['middleware' => ['cors']], function () {// Todo lo que esta adentro de este middleware requeire auteticacion
 
 	
-	Route::get('lista/get/{id}','ListaController@get');
+	Route::post('lista/getLista','ListaController@get');
 	Route::get('lista/get/activa','ListaController@getActiva');
 	Route::get('lista/get','ListaController@getAll');
 	Route::post('lista/create','ListaController@create');

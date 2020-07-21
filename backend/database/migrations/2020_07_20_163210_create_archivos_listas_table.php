@@ -17,6 +17,7 @@ class CreateArchivosListasTable extends Migration
             $table->bigIncrements('id')->unique();
             $table->string('ruta')->nullable();
             $table->integer('id_lista');
+            $table->string('tipo');
             $table->timestamps();
         });
     }

@@ -23,6 +23,7 @@ export class AccionAddComponent implements OnInit {
  idUser;
  filesSelect:any = []
 
+
   constructor(
     private fb: FormBuilder,
     private rolesService: RolesService,
@@ -38,13 +39,38 @@ export class AccionAddComponent implements OnInit {
       descripcion: ['', Validators.required],
       desde: ['', Validators.required],
       hasta: ['', Validators.required],
-      status: ['', Validators.required],
+      status: [0],
       archivo:['']
 
     });
    }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activatedRoute.params
+    .pipe(
+      switchMap(params => {
+        if (params['id']) {
+          return this.AccionService.show(params['id']);
+        } else {
+          return of(null);
+        }
+      })
+    )
+    .subscribe(user => {
+      if (user) {
+        console.log('usuario',user['id'])
+        this.blogToEdit$.next(user);
+        this.formBlog.controls['id'].setValue(user['id']);
+        this.formBlog.controls['nombre'].setValue(user['nombre']);
+        this.formBlog.controls['descripcion'].setValue(user['descripcion']);
+        this.formBlog.controls['desde'].setValue(user['desde']);
+        this.formBlog.controls['hasta'].setValue(user['hasta']);
+        this.formBlog.controls['status'].setValue(user['estatus']);
+
+      }
+    });
+}
+  
   add() {
     let usuario= JSON.parse(localStorage.getItem('user'));
     this.idUser=usuario.id;

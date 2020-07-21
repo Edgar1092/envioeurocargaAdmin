@@ -31,7 +31,7 @@ export class AccionService {
 
   show(index: number) {
     let params = {id : index}
-    return this.http.post(`lista/getAccion`, params);
+    return this.http.post(`lista/getLista`, params);
   }
 
   add(params) {

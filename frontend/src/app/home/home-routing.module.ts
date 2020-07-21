@@ -24,6 +24,10 @@ const routes: Routes = [
     component: AccionAddComponent
   },
   {
+    path: 'accion/:id',
+    component: AccionAddComponent
+  },
+  {
     path: 'historico',
     component: HistoricoComponent
   },

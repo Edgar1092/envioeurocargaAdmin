@@ -46,11 +46,11 @@ class ListaController extends Controller
             }
         }
         // Obtener un lista
-        function get($id){
+        function get(Request $request){
             try{
     
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
-                $result = Lista::find($id);
+                $result = Lista::find($request->id);
                 $response = $result;   
     
                 DB::commit(); // Guardamos la transaccion
@@ -126,7 +126,8 @@ class ListaController extends Controller
 
                 $arch = Archivo::create([
                     'ruta'    => $nombreImagen,
-                    'id_lista'     => $lista->id
+                    'id_lista'     => $lista->id,
+                    'tipo' => $value->tipo
     
                 ]);
               } 
