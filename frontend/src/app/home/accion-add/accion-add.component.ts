@@ -1,11 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { RolesService } from 'app/shared/services/roles.service';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of,from } from 'rxjs';
 import { AccionService } from 'app/shared/services/accion.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { environment } from "../../../environments/environment";
+import swal from 'sweetalert2';
+
+
 
 @Component({
   selector: 'app-accion-add',
@@ -13,6 +17,7 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./accion-add.component.scss']
 })
 export class AccionAddComponent implements OnInit {
+  ruta = environment.apiBase+"/storage/app/public/archivos/"
   formBlog: FormGroup;
   page=1;
   per_page=30;
@@ -46,29 +51,33 @@ export class AccionAddComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.activatedRoute.params
-    .pipe(
-      switchMap(params => {
-        if (params['id']) {
-          return this.AccionService.show(params['id']);
-        } else {
-          return of(null);
-        }
-      })
-    )
-    .subscribe(user => {
-      if (user) {
-        console.log('usuario',user['id'])
-        this.blogToEdit$.next(user);
-        this.formBlog.controls['id'].setValue(user['id']);
-        this.formBlog.controls['nombre'].setValue(user['nombre']);
-        this.formBlog.controls['descripcion'].setValue(user['descripcion']);
-        this.formBlog.controls['desde'].setValue(user['desde']);
-        this.formBlog.controls['hasta'].setValue(user['hasta']);
-        this.formBlog.controls['status'].setValue(user['estatus']);
+   this.datainicial();
+}
 
+datainicial(){
+  this.activatedRoute.params
+  .pipe(
+    switchMap(params => {
+      if (params['id']) {
+        return this.AccionService.show(params['id']);
+      } else {
+        return of(null);
       }
-    });
+    })
+  )
+  .subscribe(user => {
+    if (user) {
+      console.log('usuario',user['id'])
+      this.blogToEdit$.next(user);
+      this.formBlog.controls['id'].setValue(user['id']);
+      this.formBlog.controls['nombre'].setValue(user['nombre']);
+      this.formBlog.controls['descripcion'].setValue(user['descripcion']);
+      this.formBlog.controls['desde'].setValue(user['desde']);
+      this.formBlog.controls['hasta'].setValue(user['hasta']);
+      this.formBlog.controls['status'].setValue(user['estatus']);
+
+    }
+  });
 }
   
   add() {
@@ -85,6 +94,38 @@ export class AccionAddComponent implements OnInit {
       formData.append('status',this.formBlog.get('status').value);
       formData.append('archivos',JSON.stringify(this.filesSelect));
       this.AccionService.add(formData).subscribe(response => {
+        if (response) {
+          
+          this.toast.success(response['message']);
+          this.router.navigate(['/home/accion/list']);
+        } else {
+          this.toast.error(JSON.stringify(response));
+        }
+      },(error)=>
+      {
+        let mensaje =error.error.errors;
+        Object.keys(mensaje).forEach(key => {
+          console.log(key)
+          this.toast.error(mensaje[key][0]);
+          console.log(mensaje[key][0])
+         });
+      });
+    }
+  }
+
+  edit() {
+ 
+    if (this.formBlog.valid) {
+      let d = this.formBlog.value;
+      let formData:FormData = new FormData();
+      formData.append('id',this.formBlog.get('id').value);
+      formData.append('nombre',this.formBlog.get('nombre').value);
+      formData.append('descripcion',this.formBlog.get('descripcion').value);
+      formData.append('desde',this.formBlog.get('desde').value);
+      formData.append('hasta',this.formBlog.get('hasta').value);
+      formData.append('status',this.formBlog.get('status').value);
+      formData.append('archivos',JSON.stringify(this.filesSelect));
+      this.AccionService.edit(formData).subscribe(response => {
         if (response) {
           
           this.toast.success(response['message']);
@@ -132,6 +173,32 @@ export class AccionAddComponent implements OnInit {
   del(id){
     this.filesSelect.splice(id, 1);
     console.log(this.filesSelect);
+  }
+
+  borrar(blog: any) {
+    const confirm = swal.fire({
+      title: `Borrar el archivo ${blog.ruta}`,
+      text: 'Esta acción no se puede deshacer',
+      type: 'question',
+      showConfirmButton: true,
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Borrar',
+      focusCancel: true
+    });
+
+    from(confirm).subscribe(r => {
+      if (r['value']) {
+        this.AccionService.borrar(blog.id).subscribe(response => {
+          if (response) {
+            this.toast.success(response['message']);
+            this.datainicial()
+          } else {
+            this.toast.error(JSON.stringify(response));
+          }
+        });
+      }
+    });
   }
 
 

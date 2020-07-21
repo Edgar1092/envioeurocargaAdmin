@@ -89,7 +89,35 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
+       
+            <div class="row" *ngIf="blogToEdit$">
+              <div class="row" style="width:100%">
+                <div class="col-12" style="text-align:center">
+                  <h3>Archivos guardados</h3>
+                </div>
+              </div><br>
+              <div *ngFor="let im of (blogToEdit$ | async)['Archivo']; let i = index" class="col-md-2 text-center">
+              
+               
+                <img *ngIf="im.tipo != 'video/mp4'" src="{{ruta}}{{im.ruta}}" width="70" height="auto" class="margin-b-10">
+                <img *ngIf="im.tipo == 'video/mp4'" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
+              
+              <br>
+              <button
+                  type="button"
+                  class="btn btn-raised btn-danger" 
+                  (click)="borrar(im)"
+                >
+                <a class="ft-trash" style="color:white"></a>
+              </button>
+              </div>
+              </div>
+              <div class="row" >
+                <div class="row" style="width:100%">
+                  <div class="col-12" style="text-align:center">
+                    <h3>Archivos nuevos</h3>
+                  </div>
+                </div><br>
                 <div *ngFor="let im of filesSelect; let i = index" class="col-md-2 text-center">
                 
                   <img *ngIf="im.tipo != 'video/mp4'" [src]="im.imagen_mostrar" width="70" height="auto" class="margin-b-10">

@@ -41,6 +41,13 @@ export class AccionService {
       })
     });
   }
+  edit(params) {
+    return this.http.post(`lista/update`, params, {
+      headers: new HttpHeaders({
+        "Accept" : "application/json",
+      })
+    });
+  }
 
   activarInactivar(params) {
     return this.http.post(`lista/activarInactivar`, params);
@@ -49,5 +56,10 @@ export class AccionService {
   delete(id) {
     let params = {id : id}
     return this.http.post(`lista/delete`,params);
+  }
+
+  borrar(id) {
+    let params = {id : id}
+    return this.http.post(`lista/borrar`,params);
   }
 }

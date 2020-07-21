@@ -164,11 +164,33 @@ class ListaController extends Controller
    
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
             $lista = Lista::find($request->id);
-            $lista->titulo  = $request->nombre;
+            $lista->nombre  = $request->nombre;
             $lista->descripcion = $request->descripcion;
             $lista->desde = $request->desde;
             $lista->hasta = $request->hasta;
             $lista->estatus = $request->status;
+
+            if($request->archivos){
+                $archivos = json_decode($request->archivos);
+                foreach ($archivos as $key => $value) {
+                  if($value->tipo != 'video/mp4'){
+                      $resized_image = Image::make($value->imagen_guardar)->stream('png', 60);
+                      Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
+                      $nombreImagen=$value->nombre;
+                  }else{
+                      $resized_image = base64_decode($value->imagen_guardar);
+                      Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
+                      $nombreImagen=$value->nombre;
+                  }
+  
+                  $arch = Archivo::create([
+                      'ruta'    => $nombreImagen,
+                      'id_lista'     => $lista->id,
+                      'tipo' => $value->tipo
+      
+                  ]);
+                } 
+              }
             
             $lista->save();
             DB::commit(); // Guardamos la transaccion
@@ -245,5 +267,27 @@ class ListaController extends Controller
             ], 500);
         }
     }
+
+        // Eliminar archivos
+        function borrar(Request $request){
+            try{
+    
+                // var_dump('este es el id'.$request->id);
+                DB::beginTransaction(); // Iniciar transaccion de la base de datos
+                $archivo = Archivo::find($request->id);
+                $archivo->delete();
+                DB::commit(); // Guardamos la transaccion
+                return response()->json("archivo Delete",200);
+            }catch (\Exception $e) {
+                if($e instanceof ValidationException) {
+                    return response()->json($e->errors(),402);
+                }
+                DB::rollback(); // Retrocedemos la transaccion
+                Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+                return response()->json([
+                    'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+                ], 500);
+            }
+        }
    
 }
