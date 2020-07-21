@@ -20,9 +20,9 @@ class Lista extends Model
         'nombre','descripcion', 'estatus','desde','hasta'
     ];
 
-    // protected $appends = [
-    //     'Detalle'
-    // ];
+    protected $appends = [
+        'Archivo'
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -31,21 +31,21 @@ class Lista extends Model
     protected $hidden = [
 
     ];
-    // public function detalle()
-    // {
-    //     return $this->hasOne(DetalleNoticia::class, 'idnoticia');
-    // }
+    public function archivo()
+    {
+        return $this->hasMany(Archivo::class, 'id_lista');
+    }
 
-    // public function getDetalleAttribute()
-    // {
-    //     $detalle = $this->detalle()->first();
+    public function getArchivoAttribute()
+    {
+        $archivo = $this->archivo()->get();
 
-    //     if(!empty($detalle))
-    //     {
-    //         return $detalle;
-    //     }else{
-    //         return '';
-    //     }
+        if(!empty($archivo))
+        {
+            return $archivo;
+        }else{
+            return '';
+        }
 
-    // }
+    }
 }
