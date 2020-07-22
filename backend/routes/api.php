@@ -29,12 +29,13 @@ Route::post('auth/login','UserController@auth')->middleware('cors');
 	Route::post('users/update','UserController@update');
 	Route::post('users/create','UserController@create');
 	Route::delete('users/{id}','UserController@delete');
-
+	Route::post('users/usuarios','UserController@getUsuarios');
 Route::group(['middleware' => ['cors']], function () {// Todo lo que esta adentro de este middleware requeire auteticacion
 
 	
 	Route::post('lista/getLista','ListaController@get');
 	Route::get('lista/getActiva','ListaController@getActiva');
+	Route::post('lista/get/activa/app','ListaController@getActivaAPP');
 	Route::get('lista/get','ListaController@getAll');
 	Route::post('lista/create','ListaController@create');
 	Route::post('lista/update','ListaController@update');

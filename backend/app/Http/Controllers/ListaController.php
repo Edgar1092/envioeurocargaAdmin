@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lista;
+use App\ListasUsuarios;
 use App\Archivo;
 use Exception;
 use Illuminate\Http\Request;
@@ -89,6 +90,28 @@ class ListaController extends Controller
             }
         }
 
+        // Obtener un lista por  estatus activo
+        function getActivaAPP(){
+            try{
+    
+                DB::beginTransaction(); // Iniciar transaccion de la base de datos
+                $result = ListasUsuarios::where('status',1)->where('id_usuario',$request->id_usuario)->first();
+                $response = $result;   
+    
+                DB::commit(); // Guardamos la transaccion
+                return response()->json($response);
+            }catch (\Exception $e) {
+                if($e instanceof ValidationException) {
+                    return response()->json($e->errors(),402);
+                }
+                DB::rollback(); // Retrocedemos la transaccion
+                Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+                return response()->json([
+                    'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+                ], 500);
+            }
+        }
+
     // Crear noticia //
     function create(Request $request){
         // if($request->imagen!=''){
@@ -132,6 +155,20 @@ class ListaController extends Controller
                 ]);
               } 
             }
+
+            if($request->usuario_id){
+                
+                $usuarios = json_decode($request->usuario_id);
+              
+                foreach ($usuarios as $key => $value) {
+                 
+                  $arch1 = ListasUsuarios::create([
+                      'id_usuario'    => $value->id,
+                      'id_lista'     => $lista->id
+      
+                  ]);
+                } 
+              }
             
             DB::commit(); // Guardamos la transaccion
             return response()->json($lista,201);
@@ -187,6 +224,19 @@ class ListaController extends Controller
                       'ruta'    => $nombreImagen,
                       'id_lista'     => $lista->id,
                       'tipo' => $value->tipo
+      
+                  ]);
+                } 
+              }
+
+              if($request->usuario_id){
+                
+                $usuarios = json_decode($request->usuario_id);
+                foreach ($usuarios as $key => $value) {
+                
+                  $arch1 = ListasUsuarios::create([
+                      'id_usuario'    => $value->id,
+                      'id_lista'     => $lista->id
       
                   ]);
                 } 
