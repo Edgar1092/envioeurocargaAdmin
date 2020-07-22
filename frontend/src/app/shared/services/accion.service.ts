@@ -62,4 +62,8 @@ export class AccionService {
     let params = {id : id}
     return this.http.post(`lista/borrar`,params);
   }
+  usuario() {
+  
+    return this.http.post(`users/usuarios`,1);
+  }
 }

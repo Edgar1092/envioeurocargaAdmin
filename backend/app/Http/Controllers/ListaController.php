@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Lista;
 use App\Archivo;
+use App\ListasUsuarios;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -132,6 +133,20 @@ class ListaController extends Controller
                 ]);
               } 
             }
+
+            if($request->usuario_id){
+                
+                $usuarios = json_decode($request->usuario_id);
+              
+                foreach ($usuarios as $key => $value) {
+                 
+                  $arch1 = ListasUsuarios::create([
+                      'id_usuario'    => $value->id,
+                      'id_lista'     => $lista->id
+      
+                  ]);
+                } 
+              }
             
             DB::commit(); // Guardamos la transaccion
             return response()->json($lista,201);
@@ -187,6 +202,19 @@ class ListaController extends Controller
                       'ruta'    => $nombreImagen,
                       'id_lista'     => $lista->id,
                       'tipo' => $value->tipo
+      
+                  ]);
+                } 
+              }
+
+              if($request->usuario_id){
+                
+                $usuarios = json_decode($request->usuario_id);
+                foreach ($usuarios as $key => $value) {
+                
+                  $arch1 = ListasUsuarios::create([
+                      'id_usuario'    => $value->id,
+                      'id_lista'     => $lista->id
       
                   ]);
                 } 

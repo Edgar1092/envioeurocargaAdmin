@@ -11,6 +11,7 @@ import swal from 'sweetalert2';
 
 
 
+
 @Component({
   selector: 'app-accion-add',
   templateUrl: './accion-add.component.html',
@@ -22,12 +23,23 @@ export class AccionAddComponent implements OnInit {
   page=1;
   per_page=30;
   blogToEdit$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  clients: Observable<any>;
   imagen
   nombreImagen
   urlImagen
  idUser;
+ usuarios;
+ editar=0;
  filesSelect:any = []
-
+ clientSelectConfig = {
+  searchPlaceholder: 'Buscar',
+  noResultsFound: 'Sin resultados',
+  placeholder: 'Seleccionar',
+  displayKey: 'name',
+  searchOnKey: 'name',
+  search: true,
+  moreText: 'más'
+};
 
   constructor(
     private fb: FormBuilder,
@@ -45,6 +57,7 @@ export class AccionAddComponent implements OnInit {
       desde: ['', Validators.required],
       hasta: ['', Validators.required],
       status: [0],
+      usuario_id: ['', Validators.required],
       archivo:['']
 
     });
@@ -52,6 +65,7 @@ export class AccionAddComponent implements OnInit {
 
   ngOnInit() {
    this.datainicial();
+   this.obtenerUsuarios();
 }
 
 datainicial(){
@@ -59,6 +73,7 @@ datainicial(){
   .pipe(
     switchMap(params => {
       if (params['id']) {
+        this.editar=1;
         return this.AccionService.show(params['id']);
       } else {
         return of(null);
@@ -79,8 +94,30 @@ datainicial(){
     }
   });
 }
+
+// obtenerUsuarios(){
+//   this.AccionService.usuario().subscribe(response => {
+//     if (response) {
+//       // this.toast.success(response['message']);
+//       this.usuarios=response;
+//       console.log("usuarios",this.usuarios)
+//     } else {
+//       // this.toast.error(JSON.stringify(response));
+//     }
+//   });
+// }
+
+obtenerUsuarios(){
+  this.AccionService.usuario().subscribe((res)=>{
+    console.log(res);
+    this.usuarios = res;
+  },(error)=>{
+    console.log(error);
+  })
+}
   
   add() {
+    console.log('entrando en el guardar',this.formBlog)
     let usuario= JSON.parse(localStorage.getItem('user'));
     this.idUser=usuario.id;
     this.formBlog.controls['id'].setValue(this.idUser);
@@ -93,6 +130,7 @@ datainicial(){
       formData.append('hasta',this.formBlog.get('hasta').value);
       formData.append('status',this.formBlog.get('status').value);
       formData.append('archivos',JSON.stringify(this.filesSelect));
+      formData.append('usuario_id',JSON.stringify(this.formBlog.get('usuario_id').value));
       this.AccionService.add(formData).subscribe(response => {
         if (response) {
           
@@ -125,6 +163,7 @@ datainicial(){
       formData.append('hasta',this.formBlog.get('hasta').value);
       formData.append('status',this.formBlog.get('status').value);
       formData.append('archivos',JSON.stringify(this.filesSelect));
+      formData.append('usuario_id',this.formBlog.get('usuario_id').value);
       this.AccionService.edit(formData).subscribe(response => {
         if (response) {
           
@@ -199,6 +238,15 @@ datainicial(){
         });
       }
     });
+  }
+
+  clientSelected(client) {
+    if (client) {
+      // console.log('aqui va cilente',JSON.parse(JSON.stringify(client)).id)
+      this.formBlog.controls['usuario_id'].setValue(client);
+    } else {
+      this.formBlog.controls['usuario_id'].setValue('');
+    }
   }
 
 

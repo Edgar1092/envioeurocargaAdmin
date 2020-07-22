@@ -48,6 +48,26 @@ class UserController extends Controller
             ], 500);
         }
     }
+    function getUsuarios(Request $request){
+        try{
+
+            DB::beginTransaction(); // Iniciar transaccion de la base de datos
+            $result = User::get();
+            $response = $result;   
+
+            DB::commit(); // Guardamos la transaccion
+            return response()->json($response);
+        }catch (\Exception $e) {
+            if($e instanceof ValidationException) {
+                return response()->json($e->errors(),402);
+            }
+            DB::rollback(); // Retrocedemos la transaccion
+            Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+            return response()->json([
+                'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+            ], 500);
+        }
+    }
     function get($id){
         try{
 

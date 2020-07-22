@@ -75,6 +75,18 @@
                   </div>
                 </div> -->
                 <div class="col-6">
+                  <div class="form-group" >
+                    <label for="">Usuarios</label>
+                    <ngx-select-dropdown
+                      [multiple]="true"
+                      [config]="clientSelectConfig"
+                      [options]="usuarios"
+                      (change)="clientSelected($event.value)"
+                   
+                    ></ngx-select-dropdown>
+                  </div>
+                </div>
+                <div class="col-6">
                   <div class="form-group">
                     <label for="file">Agregar imagen o video</label>
                     <input
@@ -90,13 +102,13 @@
                 </div>
               </div>
        
-            <div class="row" *ngIf="blogToEdit$">
+            <div class="row" *ngIf="editar==1">
               <div class="row" style="width:100%">
                 <div class="col-12" style="text-align:center">
                   <h3>Archivos guardados</h3>
                 </div>
               </div><br>
-              <div *ngFor="let im of (blogToEdit$ | async)['Archivo']; let i = index" class="col-md-2 text-center">
+              <div  *ngFor="let im of (blogToEdit$ | async)['Archivo']; let i = index" class="col-md-2 text-center">
               
                
                 <img *ngIf="im.tipo != 'video/mp4'" src="{{ruta}}{{im.ruta}}" width="70" height="auto" class="margin-b-10">
