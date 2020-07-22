@@ -73,7 +73,7 @@ class ListaController extends Controller
             try{
     
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
-                $result = Lista::where('status',1)->first();
+                $result = Lista::where('estatus',1)->first();
                 $response = $result;   
     
                 DB::commit(); // Guardamos la transaccion
