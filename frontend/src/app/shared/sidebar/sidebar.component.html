@@ -63,7 +63,7 @@
           *ngIf="!menuItem.isExternalLink; else externalLinkBlock"
         >
           <i [ngClass]="[menuItem.icon]"></i>
-          <span class="menu-title">{{ menuItem.title | translate }}</span>
+          <span class="menu-title">{{ menuItem.title }}</span>
           <span
             *ngIf="menuItem.badge != ''"
             [ngClass]="[menuItem.badgeClass]"
@@ -73,7 +73,7 @@
         <ng-template #externalLinkBlock>
           <a [href]="[menuItem.path]" target="_blank">
             <i [ngClass]="[menuItem.icon]"></i>
-            <span class="menu-title">{{ menuItem.title | translate }}</span>
+            <span class="menu-title">{{ menuItem.title }}</span>
             <span
               *ngIf="menuItem.badge != ''"
               [ngClass]="[menuItem.badgeClass]"
@@ -116,7 +116,7 @@
             >
               <i [ngClass]="[menuSubItem.icon]"></i>
               <span class="menu-title">{{
-                menuSubItem.title | translate
+                menuSubItem.title
               }}</span>
               <span
                 *ngIf="menuSubItem.badge != ''"
@@ -128,7 +128,7 @@
               <a [href]="[menuSubItem.path]">
                 <i [ngClass]="[menuSubItem.icon]"></i>
                 <span class="menu-title">{{
-                  menuSubItem.title | translate
+                  menuSubItem.title
                 }}</span>
                 <span
                   *ngIf="menuSubItem.badge != ''"
@@ -167,7 +167,7 @@
                 >
                   <i [ngClass]="[menuSubsubItem.icon]"></i>
                   <span class="menu-title">{{
-                    menuSubsubItem.title | translate
+                    menuSubsubItem.title
                   }}</span>
                   <span
                     *ngIf="menuSubsubItem.badge != ''"
@@ -179,7 +179,7 @@
                   <a [href]="[menuSubsubItem.path]">
                     <i [ngClass]="[menuSubsubItem.icon]"></i>
                     <span class="menu-title">{{
-                      menuSubsubItem.title | translate
+                      menuSubsubItem.title
                     }}</span>
                     <span
                       *ngIf="menuSubsubItem.badge != ''"
