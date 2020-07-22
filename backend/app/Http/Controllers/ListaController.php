@@ -69,7 +69,7 @@ class ListaController extends Controller
         }
 
         // Obtener un lista por  estatus activo
-        function getActiva(){
+        function getActiva(Request $request){
             try{
     
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
@@ -91,11 +91,13 @@ class ListaController extends Controller
         }
 
         // Obtener un lista por  estatus activo
-        function getActivaAPP(){
+        function getActivaAPP(Request $request){
             try{
     
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
-                $result = ListasUsuarios::where('status',1)->where('id_usuario',$request->id_usuario)->first();
+                $result = ListasUsuarios::
+                join('tbl_listas','tbl_listas.id', '=', 'tbl_listas_usuarios.id_lista')
+                ->where('tbl_listas.status',1)->where('id_usuario',$request->id_usuario)->first();
                 $response = $result;   
     
                 DB::commit(); // Guardamos la transaccion
