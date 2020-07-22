@@ -95,9 +95,10 @@ class ListaController extends Controller
             try{
     
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
-                $result = ListasUsuarios::
-                join('tbl_listas','tbl_listas.id', '=', 'tbl_listas_usuarios.id_lista')
-                ->where('tbl_listas.status',1)->where('id_usuario',$request->id_usuario)->first();
+                $result = Lista::
+                join('tbl_listas_usuarios','tbl_listas.id', '=', 'tbl_listas_usuarios.id_lista')
+                ->select('tbl_listas_usuarios.id as idListasUsuarios','tbl_listas.*')
+                ->where('tbl_listas.estatus',1)->where('tbl_listas_usuarios.id_usuario',$request->id_usuario)->first();
                 $response = $result;   
     
                 DB::commit(); // Guardamos la transaccion
@@ -271,17 +272,17 @@ class ListaController extends Controller
             
             $lista->save();
 
-            if($request->status==1){
-                $todos=Lista::where('id','!=',$request->id)->get();
+            // if($request->status==1){
+            //     $todos=Lista::where('id','!=',$request->id)->get();
 
-                foreach($todos as $individual){
-                    $lista1 = Lista::find($individual->id);
+            //     foreach($todos as $individual){
+            //         $lista1 = Lista::find($individual->id);
      
-                    $lista1->estatus = 0;
+            //         $lista1->estatus = 0;
                     
-                    $lista1->save();
-                }
-            }
+            //         $lista1->save();
+            //     }
+            // }
             DB::commit(); // Guardamos la transaccion
             return response()->json($lista,200);
         }catch (\Exception $e) {

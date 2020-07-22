@@ -163,7 +163,7 @@ obtenerUsuarios(){
       formData.append('hasta',this.formBlog.get('hasta').value);
       formData.append('status',this.formBlog.get('status').value);
       formData.append('archivos',JSON.stringify(this.filesSelect));
-      formData.append('usuario_id',this.formBlog.get('usuario_id').value);
+      formData.append('usuario_id',JSON.stringify(this.formBlog.get('usuario_id').value));
       this.AccionService.edit(formData).subscribe(response => {
         if (response) {
           
