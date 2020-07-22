@@ -91,11 +91,11 @@ class ListaController extends Controller
         }
 
         // Obtener un lista por  estatus activo
-        function getActivaAPP(){
+        function getActivaAPP(Request $request){
             try{
     
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
-                $result = ListasUsuarios::where('status',1)->where('id_usuario',$request->id_usuario)->first();
+                $result = ListasUsuarios::where('estatus',1)->where('id_usuario',$request->id_usuario)->first();
                 $response = $result;   
     
                 DB::commit(); // Guardamos la transaccion
