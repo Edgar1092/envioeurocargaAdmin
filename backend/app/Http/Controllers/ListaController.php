@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Lista;
-use App\Archivo;
 use App\ListasUsuarios;
+use App\Archivo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,6 +74,28 @@ class ListaController extends Controller
     
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
                 $result = Lista::where('status',1)->first();
+                $response = $result;   
+    
+                DB::commit(); // Guardamos la transaccion
+                return response()->json($response);
+            }catch (\Exception $e) {
+                if($e instanceof ValidationException) {
+                    return response()->json($e->errors(),402);
+                }
+                DB::rollback(); // Retrocedemos la transaccion
+                Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+                return response()->json([
+                    'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+                ], 500);
+            }
+        }
+
+        // Obtener un lista por  estatus activo
+        function getActivaAPP(){
+            try{
+    
+                DB::beginTransaction(); // Iniciar transaccion de la base de datos
+                $result = ListasUsuarios::where('status',1)->where('id_usuario',$request->id_usuario)->first();
                 $response = $result;   
     
                 DB::commit(); // Guardamos la transaccion
