@@ -253,6 +253,37 @@ class UserController extends Controller
         }
     }
 
+    function authAPP(Request $request){
+        try{
+            $request->validate([
+             
+                'email' => 'required|email|max:124',
+                ]);
+            DB::beginTransaction(); // Iniciar transaccion de la base de datos
+            $user =  User::where('email',$request->email)->first();
+            if($user == null){
+                return response()->json(['message' => 'Usuario no existe.',], 402);
+            }
+            $user->token = str_random(30);
+            $user->save();
+            DB::commit(); // Guardamos la transaccion
+            if($user){
+                return response()->json($user,200);
+            }else{
+                return response()->json(['message' => 'Usuario no existe.',], 402);
+            }
+        }catch (\Exception $e) {
+            if($e instanceof ValidationException) {
+                return response()->json($e->errors(),402);
+            }
+            DB::rollback(); // Retrocedemos la transaccion
+            Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+            return response()->json([
+                'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+            ], 500);
+        }
+    }
+
 
     // Validamos token
     static function validateToken($token){

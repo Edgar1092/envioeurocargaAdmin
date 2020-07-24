@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 |--------------------------------------------------------------------------
 */
 Route::post('auth/login','UserController@auth')->middleware('cors');
+Route::post('auth/loginAPP','UserController@authAPP')->middleware('cors');
  Route::post('auth/register','UserController@create');
   Route::post('auth/users/update','UserController@update');
     Route::delete('auth/users/delete/{idUser}','UserController@delete');
