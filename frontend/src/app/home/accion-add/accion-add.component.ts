@@ -29,6 +29,7 @@ export class AccionAddComponent implements OnInit {
   urlImagen
  idUser;
  usuarios;
+ isResize1=false;
  editar=0;
  filesSelect:any = []
  clientSelectConfig = {
@@ -212,6 +213,7 @@ obtenerUsuarios(){
         // need to run CD since file load runs outside of zone
         this.cd.markForCheck();
         };
+        this.isResize1 =true;  
     }
   }
 
