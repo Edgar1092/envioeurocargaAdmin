@@ -18,6 +18,8 @@ class CreateArchivosListasTable extends Migration
             $table->string('ruta')->nullable();
             $table->integer('id_lista');
             $table->string('tipo');
+            $table->integer('tiempo');
+            $table->string('tipoTiempo');
             $table->timestamps();
         });
     }

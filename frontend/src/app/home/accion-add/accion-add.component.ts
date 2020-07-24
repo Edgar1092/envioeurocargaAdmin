@@ -58,7 +58,9 @@ export class AccionAddComponent implements OnInit {
       hasta: ['', Validators.required],
       status: [0],
       usuario_id: ['', Validators.required],
-      archivo:['']
+      archivo:[''],
+      tiempo:[2],
+      tipoTiempo:['s']
 
     });
    }
@@ -201,7 +203,11 @@ obtenerUsuarios(){
             this.imagen = reader.result;
             this.nombreImagen = file.name;
             var res = this.imagen.split(",");
-            this.filesSelect.push({nombre:this.nombreImagen,imagen_guardar:res[1],imagen_mostrar:this.imagen,tipo:file.type});
+            this.filesSelect.push({nombre:this.nombreImagen,
+              imagen_guardar:res[1],
+              imagen_mostrar:this.imagen,tipo:file.type,
+            tiempo:this.formBlog.get('tiempo').value,
+            tipoTiempo:this.formBlog.get('tipoTiempo').value});
             console.log(this.filesSelect)
         // need to run CD since file load runs outside of zone
         this.cd.markForCheck();

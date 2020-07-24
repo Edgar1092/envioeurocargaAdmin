@@ -141,10 +141,12 @@ class ListaController extends Controller
               $archivos = json_decode($request->archivos);
               foreach ($archivos as $key => $value) {
                 if($value->tipo != 'video/mp4'){
+                    $tipo=0;
                     $resized_image = Image::make($value->imagen_guardar)->stream('png', 60);
                     Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
                     $nombreImagen=$value->nombre;
                 }else{
+                    $tipo=1;
                     $resized_image = base64_decode($value->imagen_guardar);
                     Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
                     $nombreImagen=$value->nombre;
@@ -153,7 +155,9 @@ class ListaController extends Controller
                 $arch = Archivo::create([
                     'ruta'    => $nombreImagen,
                     'id_lista'     => $lista->id,
-                    'tipo' => $value->tipo
+                    'tipo' => $tipo,
+                    'tiempo' => $value->tiempo,
+                    'tipoTiempo' => $value->tipoTiempo,
     
                 ]);
               } 
@@ -214,10 +218,12 @@ class ListaController extends Controller
                 $archivos = json_decode($request->archivos);
                 foreach ($archivos as $key => $value) {
                   if($value->tipo != 'video/mp4'){
+                    $tipo=1;
                       $resized_image = Image::make($value->imagen_guardar)->stream('png', 60);
                       Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
                       $nombreImagen=$value->nombre;
                   }else{
+                    $tipo=0;
                       $resized_image = base64_decode($value->imagen_guardar);
                       Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
                       $nombreImagen=$value->nombre;
@@ -226,7 +232,9 @@ class ListaController extends Controller
                   $arch = Archivo::create([
                       'ruta'    => $nombreImagen,
                       'id_lista'     => $lista->id,
-                      'tipo' => $value->tipo
+                      'tipo' => $tipo,
+                      'tiempo' => $value->tiempo,
+                      'tipoTiempo' => $value->tipoTiempo,
       
                   ]);
                 } 

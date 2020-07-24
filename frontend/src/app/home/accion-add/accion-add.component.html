@@ -100,6 +100,30 @@
                     />
                   </div>
                 </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Tiempo</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="tiempo"
+                      id="tiempo"
+                      
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Tipo de tiempo</label>
+                    <select formControlName="tipoTiempo"   class="form-control" >
+                      <option value="s">Segundos</option>
+                      <option value="m">Minutos</option>
+                   
+      
+                      </select> 
+                  </div>
+                </div>
+                
               </div>
        
             <div class="row" *ngIf="editar==1">
