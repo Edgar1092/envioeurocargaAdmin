@@ -21,7 +21,8 @@ class Lista extends Model
     ];
 
     protected $appends = [
-        'Archivo'
+        'Archivo',
+        'Usuario'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -43,6 +44,27 @@ class Lista extends Model
         if(!empty($archivo))
         {
             return $archivo;
+        }else{
+            return '';
+        }
+
+    }
+
+    public function usuario()
+    {
+        return $this->hasMany(ListasUsuarios::class, 'id_lista');
+    }
+
+    public function getUsuarioAttribute()
+    {
+        $usuario = $this->usuario()
+        ->join('tbl_users','tbl_users.id', '=', 'tbl_listas_usuarios.id_usuario')
+        ->select('tbl_listas_usuarios.id as idListasUsuarios','tbl_users.*')
+        ->get();
+
+        if(!empty($usuario))
+        {
+            return $usuario;
         }else{
             return '';
         }

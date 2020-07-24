@@ -81,8 +81,8 @@
                       [multiple]="true"
                       [config]="clientSelectConfig"
                       [options]="usuarios"
-                      (change)="clientSelected($event.value)"
-                   
+                      formControlName="usuario_id"
+                      required
                     ></ngx-select-dropdown>
                   </div>
                 </div>
@@ -133,11 +133,12 @@
                   <h3>Archivos guardados</h3>
                 </div>
               </div><br>
-              <div  *ngFor="let im of (blogToEdit$ | async)['Archivo']; let i = index" class="col-md-2 text-center">
+              <div *ngIf="archivos">
+              <div  *ngFor="let im of archivos; let i = index" class="col-md-2 text-center">
               
                
-                <img *ngIf="im.tipo != 'video/mp4'" src="{{ruta}}{{im.ruta}}" width="70" height="auto" class="margin-b-10">
-                <img *ngIf="im.tipo == 'video/mp4'" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
+                <img *ngIf="im.tipo != '1'" src="{{ruta}}{{im.ruta}}" width="70" height="auto" class="margin-b-10">
+                <img *ngIf="im.tipo == '1'" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
               
               <br>
               <button
@@ -148,6 +149,7 @@
                 <a class="ft-trash" style="color:white"></a>
               </button>
               </div>
+            </div>
               </div>
               <div class="row" >
                 <div class="row" style="width:100%">

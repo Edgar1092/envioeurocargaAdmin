@@ -241,7 +241,7 @@ class ListaController extends Controller
               }
 
               if($request->usuario_id){
-                
+                $del=ListasUsuarios::where('id_lista',$lista->id)->delete();
                 $usuarios = json_decode($request->usuario_id);
                 foreach ($usuarios as $key => $value) {
                 

@@ -41,7 +41,7 @@ export class AccionAddComponent implements OnInit {
   search: true,
   moreText: 'más'
 };
-
+archivos = []
   constructor(
     private fb: FormBuilder,
     private rolesService: RolesService,
@@ -61,7 +61,7 @@ export class AccionAddComponent implements OnInit {
       usuario_id: ['', Validators.required],
       archivo:[''],
       tiempo:[2],
-      tipoTiempo:['s']
+      tipoTiempo:['s'],
 
     });
    }
@@ -85,7 +85,7 @@ datainicial(){
   )
   .subscribe(user => {
     if (user) {
-      console.log('usuario',user['id'])
+      console.log('usuario',user)
       this.blogToEdit$.next(user);
       this.formBlog.controls['id'].setValue(user['id']);
       this.formBlog.controls['nombre'].setValue(user['nombre']);
@@ -93,7 +93,13 @@ datainicial(){
       this.formBlog.controls['desde'].setValue(user['desde']);
       this.formBlog.controls['hasta'].setValue(user['hasta']);
       this.formBlog.controls['status'].setValue(user['estatus']);
+      this.formBlog.controls['usuario_id'].setValue(user['Usuario']);
+      if(user['Archivo'] != ''){
 
+        this.archivos = user['Archivo'];
+      }
+      
+      console.log(this.formBlog.value);
     }
   });
 }
@@ -250,7 +256,7 @@ obtenerUsuarios(){
 
   clientSelected(client) {
     if (client) {
-      // console.log('aqui va cilente',JSON.parse(JSON.stringify(client)).id)
+      console.log('aqui va cilente',JSON.parse(JSON.stringify(client)))
       this.formBlog.controls['usuario_id'].setValue(client);
     } else {
       this.formBlog.controls['usuario_id'].setValue('');
