@@ -86,20 +86,9 @@
                     ></ngx-select-dropdown>
                   </div>
                 </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="file">Agregar imagen o video</label>
-                    <input
-                      type="file"
-                      accept="image/jpeg, image/png, .jpg, .jpeg, .png, .mp4"
-                      class="form-control"
-                      formControlName="archivo"
-                      (change)="onFileChange($event)"
-                      id="archivo"
-                      
-                    />
-                  </div>
-                  <img *ngIf="isResize1" src="/assets/img/resize.gif" width="30" height="30">
+                <div class="col-12">
+                  <h5>Datos de archivo</h5>
+                  <p>Si el archvio es video no se tomara en cuanta el tiempo seleccionado</p>
                 </div>
                 <div class="col-6">
                   <div class="form-group">
@@ -124,7 +113,31 @@
                       </select> 
                   </div>
                 </div>
-                
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>Orden</label>
+                    <select formControlName="orden" class="form-control" disabled >
+                      
+                      <option *ngFor="let a of listaOrden; index as i;" > {{a}} </option>                   
+      
+                      </select> 
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="file">Agregar imagen o video</label>
+                    <input
+                      type="file"
+                      accept="image/jpeg, image/png, .jpg, .jpeg, .png, .mp4"
+                      class="form-control"
+                      formControlName="archivo"
+                      (change)="onFileChange($event)"
+                      id="archivo"
+                      
+                    />
+                  </div>
+                  <img *ngIf="isResize1" src="/assets/img/resize.gif" width="30" height="30">
+                </div>
               </div>
        
             <div class="row" *ngIf="editar==1">
@@ -133,22 +146,47 @@
                   <h3>Archivos guardados</h3>
                 </div>
               </div><br>
-              <div *ngIf="archivos">
-              <div  *ngFor="let im of archivos; let i = index" class="col-md-2 text-center">
-              
-               
-                <img *ngIf="im.tipo != '1'" src="{{ruta}}{{im.ruta}}" width="70" height="auto" class="margin-b-10">
-                <img *ngIf="im.tipo == '1'" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
-              
-              <br>
-              <button
-                  type="button"
-                  class="btn btn-raised btn-danger" 
-                  (click)="borrar(im)"
-                >
-                <a class="ft-trash" style="color:white"></a>
-              </button>
-              </div>
+              <div class="row width-100" *ngIf="archivos">
+              <table
+                class="table table-striped"
+              >
+                <thead class="thead-inverse">
+
+                <tbody>
+                  <tr *ngFor="let im of archivos; let i = index">
+                    <td class="text-center">
+                      <img *ngIf="im.tipo != 1" src="{{ruta}}{{im.ruta}}" width="70" height="auto" class="margin-b-10">
+                      <img *ngIf="im.tipo == 1" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-raised btn-danger" 
+                        (click)="borrar(im)"
+                      >
+                        <a class="ft-trash" style="color:white"></a>
+                      </button>
+                      <button
+                      *ngIf="i != 0"
+                        type="button"
+                        class="btn btn-raised btn-info" 
+                        (click)="ordenDownOld(im,i)"
+                      >
+                        <a class="ft-arrow-up" style="color:white"></a>
+                      </button>
+                      <button
+                      *ngIf="i != (archivos.length-1)"
+                        type="button"
+                        class="btn btn-raised btn-info" 
+                        (click)="ordenUpOld(im,i)"
+                      >
+                        <a class="ft-arrow-down" style="color:white"></a>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                </table>
+
             </div>
               </div>
               <div class="row" >
@@ -157,20 +195,49 @@
                     <h3>Archivos nuevos</h3>
                   </div>
                 </div><br>
-                <div *ngFor="let im of filesSelect; let i = index" class="col-md-2 text-center">
-                
-                  <img *ngIf="im.tipo != 'video/mp4'" [src]="im.imagen_mostrar" width="70" height="auto" class="margin-b-10">
-                  <img *ngIf="im.tipo == 'video/mp4'" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
-                
-                <br>
-                <button
-                    type="button"
-                    class="btn btn-raised btn-danger" 
-                    (click)="del(i)"
+                <div class="row width-100" *ngIf="filesSelect">
+                  <table
+                    class="table table-striped"
                   >
-                  <a class="ft-trash" style="color:white"></a>
-                </button>
+                    <thead class="thead-inverse">
+    
+                    <tbody>
+                      <tr *ngFor="let im of filesSelect; let i = index">
+                        <td class="text-center">
+                          <img *ngIf="im.tipo != 1" [src]="im.imagen_mostrar" width="70" height="auto" class="margin-b-10">
+                          <img *ngIf="im.tipo == 1" src="assets/img/icon_video.png" width="70" height="auto" class="margin-b-10">
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-danger" 
+                            (click)="del(i)"
+                          >
+                            <a class="ft-trash" style="color:white"></a>
+                          </button>
+                          <button
+                          *ngIf="i != 0"
+                            type="button"
+                            class="btn btn-raised btn-info" 
+                            (click)="ordenDownNew(im,i)"
+                          >
+                            <a class="ft-arrow-up" style="color:white"></a>
+                          </button>
+                          <button
+                          *ngIf="i != (filesSelect.length-1)"
+                            type="button"
+                            class="btn btn-raised btn-info" 
+                            (click)="ordenUpNew(im,i)"
+                          >
+                            <a class="ft-arrow-down" style="color:white"></a>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                    </table>
+    
                 </div>
+                
                 </div>
               <div class="row">
                 <div

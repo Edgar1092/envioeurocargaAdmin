@@ -42,6 +42,7 @@ export class AccionAddComponent implements OnInit {
   moreText: 'más'
 };
 archivos = []
+listaOrden = []
   constructor(
     private fb: FormBuilder,
     private rolesService: RolesService,
@@ -62,6 +63,7 @@ archivos = []
       archivo:[''],
       tiempo:[2],
       tipoTiempo:['s'],
+      orden:['']
 
     });
    }
@@ -97,24 +99,19 @@ datainicial(){
       if(user['Archivo'] != ''){
 
         this.archivos = user['Archivo'];
+        let n = user['Archivo'].length +1;
+        this.formBlog.controls['orden'].setValue(n);
+        this.listaOrden = []
+        for (let index = n; index > 0; index--) {
+          this.listaOrden.push(index)
+          
+        }
       }
       
-      console.log(this.formBlog.value);
+      console.log(this.listaOrden);
     }
   });
 }
-
-// obtenerUsuarios(){
-//   this.AccionService.usuario().subscribe(response => {
-//     if (response) {
-//       // this.toast.success(response['message']);
-//       this.usuarios=response;
-//       console.log("usuarios",this.usuarios)
-//     } else {
-//       // this.toast.error(JSON.stringify(response));
-//     }
-//   });
-// }
 
 obtenerUsuarios(){
   this.AccionService.usuario().subscribe((res)=>{
@@ -202,7 +199,7 @@ obtenerUsuarios(){
       
       const [file2] = event.target.files;
       let file: File = fileList[0];
-      
+      this.isResize1 =true;
       reader.readAsDataURL(file2);
       // console.log(file2);
         reader.onload = () => {
@@ -210,27 +207,58 @@ obtenerUsuarios(){
             this.imagen = reader.result;
             this.nombreImagen = file.name;
             var res = this.imagen.split(",");
+            var tipoAr = 0
+            if(file.type == "video/mp4"){
+              tipoAr = 1
+            }
             this.filesSelect.push({nombre:this.nombreImagen,
               imagen_guardar:res[1],
-              imagen_mostrar:this.imagen,tipo:file.type,
-            tiempo:this.formBlog.get('tiempo').value,
-            tipoTiempo:this.formBlog.get('tipoTiempo').value});
+              imagen_mostrar:this.imagen,
+              tipo:tipoAr,
+              tiempo:this.formBlog.get('tiempo').value,
+              tipoTiempo:this.formBlog.get('tipoTiempo').value,
+              orden:this.formBlog.get('orden').value
+            });
+            let n = this.listaOrden.length +1;
+            this.formBlog.controls['orden'].setValue(n);
+            this.listaOrden= []
+            for (let index = n; index > 0; index--) {
+              this.listaOrden.push(index)
+              
+            }
+            
             console.log(this.filesSelect)
         // need to run CD since file load runs outside of zone
         this.cd.markForCheck();
         };
-        this.isResize1 =true;  
+        this.formBlog.controls['archivo'].setValue('');
+        this.isResize1 =false;  
     }
   }
 
   del(id){
+    let orSelect = this.filesSelect[id].orden
+    console.log("SS=>",orSelect)
+    this.filesSelect.forEach((element,index)=> {
+      if(element.orden > orSelect ){
+        this.filesSelect[index].orden = element.orden-1
+      }
+    });
     this.filesSelect.splice(id, 1);
+    let fs = this.filesSelect.length;
+    let n = (this.archivos.length+1)+fs;
+    this.formBlog.controls['orden'].setValue(n);
+    this.listaOrden = []
+    for (let index = n; index > 0; index--){
+      this.listaOrden.push(index)
+    }
+    
     console.log(this.filesSelect);
   }
 
   borrar(blog: any) {
     const confirm = swal.fire({
-      title: `Borrar el archivo ${blog.ruta}`,
+      title: `¿Desea borrar el archivo?`,
       text: 'Esta acción no se puede deshacer',
       type: 'question',
       showConfirmButton: true,
@@ -262,6 +290,94 @@ obtenerUsuarios(){
       this.formBlog.controls['usuario_id'].setValue('');
     }
   }
+  ordenUpNew(im,pos){
+    let posUp = pos+1
+    this.filesSelect[pos].orden = im.orden +1;
+    this.filesSelect[posUp].orden = this.filesSelect[posUp].orden-1;
+    this.filesSelect.sort(function (a, b) {
+      if (a.orden > b.orden) {
+        return 1;
+      }
+      if (a.orden < b.orden) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+    console.log(this.filesSelect);
+  }
+  ordenDownNew(im,pos){
+    let posDown = pos-1
+    this.filesSelect[pos].orden = im.orden -1;
+    this.filesSelect[posDown].orden = this.filesSelect[posDown].orden +1;
+    this.filesSelect.sort(function (a, b) {
+      if (a.orden > b.orden) {
+        return 1;
+      }
+      if (a.orden < b.orden) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+    console.log(this.filesSelect);
+  }
+  ordenUpOld(im,pos){
+    console.log(im,pos)
+    let posUp = pos+1
+    let params = {
+      idUno : this.archivos[pos].id,
+      idDos : this.archivos[posUp].id,
+      ordenUno : im.orden +1,
+      ordenDos : this.archivos[posUp].orden -1
+    }
+    this.AccionService.updateOrdenArchivo(params).subscribe((res)=>{
+      this.archivos[pos].orden = im.orden +1;
+      this.archivos[posUp].orden = this.archivos[posUp].orden -1;
+      this.archivos.sort(function (a, b) {
+        if (a.orden > b.orden) {
+          return 1;
+        }
+        if (a.orden < b.orden) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+      this.datainicial();
+      console.log(this.archivos);
+    },(error)=>{
+      console.log(error)
+    });
 
+  }
+  ordenDownOld(im,pos){
+
+    let posDown = pos-1
+    let params = {
+      idUno : this.archivos[pos].id,
+      idDos : this.archivos[posDown].id,
+      ordenUno : im.orden -1,
+      ordenDos : this.archivos[posDown].orden +1
+    }
+    this.AccionService.updateOrdenArchivo(params).subscribe((res)=>{
+      this.archivos[pos].orden = im.orden -1;
+      this.archivos[posDown].orden = this.archivos[posDown].orden +1;
+      this.archivos.sort(function (a, b) {
+        if (a.orden > b.orden) {
+          return 1;
+        }
+        if (a.orden < b.orden) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+      this.datainicial();
+      console.log(this.archivos);
+    },(error)=>{
+      console.log(error)
+    });
+  }
 
 }

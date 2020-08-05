@@ -39,3 +39,10 @@
 .margin-b-10{
   margin-bottom: 10px !important;
 }
+.width-100{
+  width: 100% !important;
+}
+.btn{
+  margin-left: 5px !important ;
+  margin-right: 5px !important;
+}

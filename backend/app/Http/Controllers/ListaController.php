@@ -98,7 +98,7 @@ class ListaController extends Controller
                 $result = Lista::
                 join('tbl_listas_usuarios','tbl_listas.id', '=', 'tbl_listas_usuarios.id_lista')
                 ->select('tbl_listas_usuarios.id as idListasUsuarios','tbl_listas.*')
-                ->where('tbl_listas.estatus',1)->where('tbl_listas_usuarios.id_usuario',$request->id_usuario)->first();
+                ->where('tbl_listas.estatus',1)->where('tbl_listas_usuarios.id_usuario',$request->id_usuario)->get();
                 $response = $result;   
     
                 DB::commit(); // Guardamos la transaccion
@@ -117,15 +117,6 @@ class ListaController extends Controller
 
     // Crear noticia //
     function create(Request $request){
-        // if($request->imagen!=''){
-        //     $nombreImagen=time().$request->nombre_imagen;
-        //     $resized_image = Image::make($request->imagen)->stream('png', 60);
-            
-        //     Storage::disk('local')->put('\\public\\noticias\\'.$nombreImagen, $resized_image); // check return for success and failure
-        // }else{
-        //     $nombreImagen='';
-           
-        // }
         try{
             
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
@@ -140,16 +131,17 @@ class ListaController extends Controller
             if($request->archivos){
               $archivos = json_decode($request->archivos);
               foreach ($archivos as $key => $value) {
-                if($value->tipo != 'video/mp4'){
+                $n = str_replace(" ", "_", self::eliminar_acentos($value->nombre));
+                if($value->tipo == 0){
                     $tipo=0;
                     $resized_image = Image::make($value->imagen_guardar)->stream('png', 60);
-                    Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
-                    $nombreImagen=$value->nombre;
+                    Storage::disk('local')->put('\\public\\archivos\\'.time()."_".strtolower($n), $resized_image);
+                    $nombreImagen=strtolower($n);
                 }else{
                     $tipo=1;
                     $resized_image = base64_decode($value->imagen_guardar);
-                    Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
-                    $nombreImagen=$value->nombre;
+                    Storage::disk('local')->put('\\public\\archivos\\'.time()."_".strtolower($n), $resized_image);
+                    $nombreImagen=time()."_".strtolower($n);
                 }
 
                 $arch = Archivo::create([
@@ -158,6 +150,7 @@ class ListaController extends Controller
                     'tipo' => $tipo,
                     'tiempo' => $value->tiempo,
                     'tipoTiempo' => $value->tipoTiempo,
+                    'orden' => $value->orden
     
                 ]);
               } 
@@ -195,15 +188,6 @@ class ListaController extends Controller
    
     // Modificar listas
     function update(Request $request){
-        // if($request->imagen!=''){
-        //     $nombreImagen=time().$request->nombre_imagen;
-        //     $resized_image = Image::make($request->imagen)->stream('png', 60);
-            
-        //     Storage::disk('local')->put('\\public\\listas\\'.$nombreImagen, $resized_image); // check return for success and failure
-        // }else{
-        //     $nombreImagen='';
-           
-        // }
          try{
    
             DB::beginTransaction(); // Iniciar transaccion de la base de datos
@@ -217,24 +201,26 @@ class ListaController extends Controller
             if($request->archivos){
                 $archivos = json_decode($request->archivos);
                 foreach ($archivos as $key => $value) {
-                  if($value->tipo != 'video/mp4'){
-                    $tipo=1;
-                      $resized_image = Image::make($value->imagen_guardar)->stream('png', 60);
-                      Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
-                      $nombreImagen=$value->nombre;
-                  }else{
+                $str =self::eliminar_acentos($value->nombre);
+                $n = str_replace(" ", "_", $str);
+                  if($value->tipo == 0){
                     $tipo=0;
+                      $resized_image = Image::make($value->imagen_guardar)->stream('png', 60);
+                      Storage::disk('local')->put('\\public\\archivos\\'.time()."_".strtolower($n), $resized_image);
+                      $nombreImagen=time()."_".strtolower($n);
+                  }else{
+                    $tipo=1;
                       $resized_image = base64_decode($value->imagen_guardar);
-                      Storage::disk('local')->put('\\public\\archivos\\'.$value->nombre, $resized_image);
-                      $nombreImagen=$value->nombre;
+                      Storage::disk('local')->put('\\public\\archivos\\'.time()."_".strtolower($n), $resized_image);
+                      $nombreImagen=time()."_".strtolower($n);
                   }
-  
                   $arch = Archivo::create([
                       'ruta'    => $nombreImagen,
                       'id_lista'     => $lista->id,
                       'tipo' => $tipo,
                       'tiempo' => $value->tiempo,
                       'tipoTiempo' => $value->tipoTiempo,
+                      'orden' => $value->orden
       
                   ]);
                 } 
@@ -280,17 +266,6 @@ class ListaController extends Controller
             
             $lista->save();
 
-            // if($request->status==1){
-            //     $todos=Lista::where('id','!=',$request->id)->get();
-
-            //     foreach($todos as $individual){
-            //         $lista1 = Lista::find($individual->id);
-     
-            //         $lista1->estatus = 0;
-                    
-            //         $lista1->save();
-            //     }
-            // }
             DB::commit(); // Guardamos la transaccion
             return response()->json($lista,200);
         }catch (\Exception $e) {
@@ -329,9 +304,9 @@ class ListaController extends Controller
         }
     }
 
-        // Eliminar archivos
-        function borrar(Request $request){
-            try{
+    // Eliminar archivos
+    function borrar(Request $request){
+        try{
     
                 // var_dump('este es el id'.$request->id);
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
@@ -339,7 +314,7 @@ class ListaController extends Controller
                 $archivo->delete();
                 DB::commit(); // Guardamos la transaccion
                 return response()->json("archivo Delete",200);
-            }catch (\Exception $e) {
+        }catch (\Exception $e) {
                 if($e instanceof ValidationException) {
                     return response()->json($e->errors(),402);
                 }
@@ -348,7 +323,79 @@ class ListaController extends Controller
                 return response()->json([
                     'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
                 ], 500);
-            }
         }
+            
+    }
+    //funcion editar orden archivo
+    public function updateOrdenArchivo(Request $request){
+        try{
+            DB::beginTransaction(); // Iniciar transaccion de la base de datos
+            $archivoUno = Archivo::find($request->idUno);
+            $archivoDos = Archivo::find($request->idDos);
+     
+            $archivoUno->orden = $request->ordenUno;
+            $archivoDos->orden = $request->ordenDos;
+            
+            $archivoUno->save();
+            $archivoDos->save();
+
+            DB::commit(); // Guardamos la transaccion
+            return response()->json([
+                'message' => 'Actualizacion correcta.',
+            ],200);
+
+        }catch (\Exception $e) {
+                if($e instanceof ValidationException) {
+                    return response()->json($e->errors(),402);
+                }
+                DB::rollback(); // Retrocedemos la transaccion
+                Log::error('Ha ocurrido un error en '.$this->NAME_CONTROLLER.': '.$e->getMessage().', Linea: '.$e->getLine());
+                return response()->json([
+                    'message' => 'Ha ocurrido un error al tratar de guardar los datos.',
+                ], 500);
+        }
+    }
+    public function eliminar_acentos($cadena){
+		
+            //Reemplazamos la A y a
+            $cadena = str_replace(
+            array('Á', 'À', 'Â', 'Ä', 'á', 'à', 'ä', 'â', 'ª'),
+            array('A', 'A', 'A', 'A', 'a', 'a', 'a', 'a', 'a'),
+            $cadena
+            );
+    
+            //Reemplazamos la E y e
+            $cadena = str_replace(
+            array('É', 'È', 'Ê', 'Ë', 'é', 'è', 'ë', 'ê'),
+            array('E', 'E', 'E', 'E', 'e', 'e', 'e', 'e'),
+            $cadena );
+    
+            //Reemplazamos la I y i
+            $cadena = str_replace(
+            array('Í', 'Ì', 'Ï', 'Î', 'í', 'ì', 'ï', 'î'),
+            array('I', 'I', 'I', 'I', 'i', 'i', 'i', 'i'),
+            $cadena );
+    
+            //Reemplazamos la O y o
+            $cadena = str_replace(
+            array('Ó', 'Ò', 'Ö', 'Ô', 'ó', 'ò', 'ö', 'ô'),
+            array('O', 'O', 'O', 'O', 'o', 'o', 'o', 'o'),
+            $cadena );
+    
+            //Reemplazamos la U y u
+            $cadena = str_replace(
+            array('Ú', 'Ù', 'Û', 'Ü', 'ú', 'ù', 'ü', 'û'),
+            array('U', 'U', 'U', 'U', 'u', 'u', 'u', 'u'),
+            $cadena );
+    
+            //Reemplazamos la N, n, C y c
+            $cadena = str_replace(
+            array('Ñ', 'ñ', 'Ç', 'ç'),
+            array('N', 'n', 'C', 'c'),
+            $cadena
+            );
+            
+            return $cadena;
+    }
    
 }

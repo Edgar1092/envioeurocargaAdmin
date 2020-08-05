@@ -8,5 +8,7 @@ export const environment = {
     apiUrl: 'http://localhost/envioeurocargaAdmin/backend/public/api',
     apiBase: 'http://localhost/envioeurocargaAdmin/backend',
   //  apiUrl: '',
+  // apiUrl: 'https://xionis.es/xionis/backend/public/api',
+  // apiBase: 'https://xionis.es/xionis/backend',
   serviceWorker: false
 };

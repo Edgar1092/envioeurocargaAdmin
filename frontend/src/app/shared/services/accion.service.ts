@@ -66,4 +66,12 @@ export class AccionService {
   
     return this.http.post(`users/usuarios`,1);
   }
+  updateOrdenArchivo(params) {
+    
+    return this.http.post(`lista/updateOrdenArchivo`,params);
+  }
+  updateOrden(params) {
+    
+    return this.http.post(`lista/updateOrden`,params);
+  }
 }

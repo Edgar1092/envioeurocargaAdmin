@@ -17,7 +17,7 @@ class Lista extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre','descripcion', 'estatus','desde','hasta'
+        'nombre','descripcion', 'estatus','desde','hasta','orden'
     ];
 
     protected $appends = [
@@ -39,7 +39,7 @@ class Lista extends Model
 
     public function getArchivoAttribute()
     {
-        $archivo = $this->archivo()->get();
+        $archivo = $this->archivo()->orderBy('orden','asc')->get();
 
         if(!empty($archivo))
         {

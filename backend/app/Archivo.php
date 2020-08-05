@@ -17,7 +17,7 @@ class Archivo extends Model
      * @var array
      */
     protected $fillable = [
-        'ruta','id_lista','tipo','tiempo','tipoTiempo'
+        'ruta','id_lista','tipo','tiempo','tipoTiempo','orden'
     ];
 
     // protected $appends = [

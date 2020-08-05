@@ -43,6 +43,7 @@ Route::group(['middleware' => ['cors']], function () {// Todo lo que esta adentr
 	Route::post('lista/delete','ListaController@delete');
 	Route::post('lista/borrar','ListaController@borrar');
 	Route::post('lista/activarInactivar','ListaController@activarInactivar');
-
+	Route::post('lista/updateOrden','ListaController@updateOrden');
+	Route::post('lista/updateOrdenArchivo','ListaController@updateOrdenArchivo');
 
 });
