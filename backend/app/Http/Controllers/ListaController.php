@@ -93,16 +93,25 @@ class ListaController extends Controller
         // Obtener un lista por  estatus activo
         function getActivaAPP(Request $request){
             try{
-    
+    $arreglo=array();
                 DB::beginTransaction(); // Iniciar transaccion de la base de datos
                 $result = Lista::
                 join('tbl_listas_usuarios','tbl_listas.id', '=', 'tbl_listas_usuarios.id_lista')
                 ->select('tbl_listas_usuarios.id as idListasUsuarios','tbl_listas.*')
                 ->where('tbl_listas.estatus',1)->where('tbl_listas_usuarios.id_usuario',$request->id_usuario)->get();
                 $response = $result;   
+
+                foreach($response as $respo){
+
+                	// var_dump($respo);
+                	foreach($respo['Archivo'] as $arch){
+						array_push($arreglo, $arch);
+                	}
+                	
+                }
     
                 DB::commit(); // Guardamos la transaccion
-                return response()->json($response);
+                return response()->json($arreglo);
             }catch (\Exception $e) {
                 if($e instanceof ValidationException) {
                     return response()->json($e->errors(),402);
